@@ -1,0 +1,289 @@
+﻿@{
+    ViewBag.Title = "Usuarios";
+    Layout = "~/Views/Shared/_LayoutAdm.cshtml";
+}
+@using UxiEntities
+@model List<UxiEntities.USP_GetUsuarioCuenta_EE>
+               <section class="mbr-section mbr-section-hero mbr-section-md-padding" id="header5-1c" style="background-color: rgb(239, 239, 239);">
+                   <div class="container">
+                       <div class="row">
+                           <div class="mbr-section">
+                               <h1 class="mbr-section-title display-1" style="color:dodgerblue">Gestión de Usuarios</h1>
+                               <div data-form-alert="true">
+                               </div>
+                               <div>
+                                   <h4>En esta sección puedes modificar el saldo a los usuarios registrados o cambiar su estatus de minorista a mayorista...</h4>
+                                   <hr />
+                                   <div style=" overflow-y: scroll;">
+                                       <table id="TableoCLientes" class="table table-striped">
+                                           <thead>
+                                               <tr>
+                                                   <th>ID</th>
+                                                   <th>Nombre</th>
+                                                   <th>Email</th>
+                                                   <th>Tipo</th>
+                                                   <th>Estatus</th>
+                                                   <th>Editar</th>
+                                                   <th>Historial</th>
+                                               </tr>
+                                           </thead>
+
+                                           @foreach (var lib in Model)
+                                           {
+                                               <tr>
+                                                   <td>@lib.IdUsuario</td>
+                                                   <td>@lib.Nombre.ToUpper()  @lib.ApPaterno.ToUpper()</td>
+                                                   <td>@lib.Email</td>
+                                                   <td>
+                                                       @{
+                                                           var tipo = "";
+                                                       }
+                                                       @switch (@lib.TipoCliente)
+                                                       {
+                                                           case 1:
+                                                               tipo = "Mayorista Pro";
+                                                               break;
+                                                           case 2:
+                                                               tipo = "Mayorista";
+                                                               break;
+                                                           case 3:
+                                                               tipo = "Minorista";
+                                                               break;
+                                                       }
+                                                       @tipo
+                                                   </td>
+                                                   <td> <input id="checkBox" type="checkbox" disabled="True" checked="@lib.Activo"> @lib.Activo </td>
+                                                   <td><button id="btnAgregarOrden" onclick="AddMonto(@lib.IdUsuario, '@lib.Nombre.ToUpper() @lib.ApPaterno.ToUpper()', @lib.saldoafavor, @lib.TipoCliente, '@lib.VerTarifas.ToString().ToLower()')">Editar</button></td>
+                                                   <td><button id="btnHistorial" onclick="verHistorial(@lib.IdUsuario)">Historial</button></td>
+                                               </tr>
+                                           }
+                                       </table>
+                                   </div>
+                                   <hr />
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <!--Modal-->
+                   <div class="modal fade" id="playerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                       <div class="modal-dialog">
+                           <div class="modal-content">
+                               <div class="modal-header">
+                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                   <h4 class="modal-title" id="myModalLabel">Activación de Saldo</h4>
+                                   <div style="display: inline-block; vertical-align: middle;">
+                                       <div class="">
+                                           <input class="chkToogleOperation is-toggle" id="ToogleVerTarifas" binario="true" data-value="" type="checkbox" value="false">
+                                           <label for="ToogleVerTarifas">Ver tarifas</label>
+                                       </div>
+                                   </div>
+                                   <div style="display: inline-block; vertical-align:middle; padding-left: 20px;"><b>Ver tarifas</b></div>
+                               </div>
+                               <div class="modal-body">
+                                   <form>
+                                       <input id="VerTarifas" type="hidden" name="VerTarifas" value="false" />
+                                       <input id="playerId" type="hidden" />
+                                       <div class="form-group">
+                                           <label for="name">Nombre</label>
+                                           <input type="text" class="form-control" id="name" placeholder="Nombre">
+                                       </div>
+                                       <div class="form-group">
+                                           <label for="SaldoCorriente">Monto en Cuenta</label>
+                                           <input type="text" class="form-control" id="SaldoCorriente" placeholder="Saldo en Cuenta">
+                                       </div>
+                                       <div class="form-group">
+                                           <label for="idNuevoSaldo">Agregar Saldo</label>
+                                           <input type="number" class="form-control" id="idNuevoSaldo" placeholder="Agregar Saldo en MXN">
+                                       </div>
+                                       <div class="form-group">
+                                           <label for="TipoUsuario">Tipo de Usuario</label>
+                                           <select id="tipoUsurDDl" class="form-control input-sm input-inverse">
+                                               <option selected value="NA">Selecciona un tipo Usuario</option>
+                                               <option value="1">Mayorista Pro</option>
+                                               <option value="2">Mayorista </option>
+                                               <option value="3">Minorista</option>
+                                           </select>
+                                       </div>
+                                   </form>
+                               </div>
+                               <div style="text-align:right; padding-right:10px;">
+                                   <button type="button" class="btn btn-sm btn-black" data-dismiss="modal">Cerrar</button>
+                                   <button type="button" id="btnSave" onclick="AddChangesUsuario()" class="btn btn-sm btn-black">Guardar</button>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <!--ModalHistorial-->
+
+                   <div class="modal fade" id="playerModalHistorial" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                       <div class="modal-dialog">
+                           <div class="modal-content">
+                               <div class="modal-header">
+                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                   <h4 class="modal-title" id="myModalLabel">Historial de saldos</h4>
+                                   <input id="playerIdhistorial" type="hidden" />
+                                   
+                               </div>
+                               <div class="modal-body">
+
+                                   <div class="form-group">
+                                       <label for="TipoUsuario">Periodo</label>
+                                       <select id="cboFechaRango" class="form-control input-sm input-inverse">
+                                           <option selected value="NA">Selecciona el periodo a mostrar</option>
+                                           <option value="10">10 días</option>
+                                           <option value="20">20 días </option>
+                                           <option value="60">60 días</option>
+                                       </select>
+                                   </div>
+                                   <div style="overflow-y: scroll:auto;">
+                                       <hr />
+                                       <div class="table-responsive">
+                                           <table id="TableHistorial" class="table table-striped">
+                                               <thead>
+                                                   <tr>
+
+                                                       <th>Fecha</th>
+                                                       <th>Ingresos</th>
+                                                       <th>Salidas</th>
+                                                       <th>Detalle</th>
+
+                                                   </tr>
+                                               </thead>
+
+                                           </table>
+                                       </div>
+                                       <hr />
+
+                                   </div>
+
+                               </div>
+                               <div style="text-align:right; padding-right:10px;">
+                                   <button type="button" class="btn btn-sm btn-black" data-dismiss="modal">Cerrar</button>
+                                   <button type="button" id="btnSave" onclick="HistorialSaldo()" class="btn btn-sm btn-black">Ver</button>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+
+               </section>|
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            $("#ToogleVerTarifas").change(function () {
+                if ($(this).is(':checked')) {
+                    $(this).val('true');
+                    $("#VerTarifas").val(true);
+                }
+                else {
+                    $(this).val('false');
+                    $("#VerTarifas").val(false);
+                }
+            });
+    });
+
+    function verHistorial(allId) {
+        $("#playerModalHistorial").modal("show");
+        $("#playerIdhistorial").val(allId);
+        $("#TableHistorial").html('');
+    }
+
+        function AddMonto(allId, nol, saldo, tipoUsr, tarifas) {
+            var number = saldo;
+            $("#name").val(nol);
+            $("#idNuevoSaldo").val('');
+            $("#playerId").val(allId);
+            $("#SaldoCorriente").val(new Intl.NumberFormat().format(number));
+            document.getElementById("SaldoCorriente").disabled = true;
+            document.getElementById("name").disabled = true;
+            $("#tipoUsurDDl").val(tipoUsr);
+            if (tarifas == "true") {
+                $("#ToogleVerTarifas").val('true');
+                $("#ToogleVerTarifas").prop('checked', true);
+                $("#VerTarifas").val(tarifas);
+            }
+            else {
+                $("#ToogleVerTarifas").val('false');
+                $("#ToogleVerTarifas").prop('checked', false);
+                $("#VerTarifas").val(tarifas);
+            }
+            $("#playerModal").modal("show");
+        }
+        function AddChangesUsuario() {
+            //en esta seccion se va ainsertar mediante un servicio el monto
+            // vamos a llevarlo desde la forma al controller
+
+            var a = $("#playerId").val();
+            var b = $("#idNuevoSaldo").val() == "" ? 0 : $("#idNuevoSaldo").val();
+            var verTarifas = $("#VerTarifas").val();
+
+            var e = document.getElementById("tipoUsurDDl");
+            var strUser = e.options[e.selectedIndex].value;
+
+            $.ajax({
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/json',
+                url: "/Adm/actualizaUsuario",
+                data: JSON.stringify({ idUsuario: a, IdTipo: strUser, saldo: b, verTarifas: verTarifas }),
+                success: function (data) {
+
+                },
+                error: function (data) {
+                    showMessageType("danger", "¡tuvimos un problema!");
+                }
+            })
+
+            $("#playerModal").modal("hide");
+            showMessageType("success", "¡El cambio fue exitoso!");
+            testtimeout();
+        }
+
+        function testtimeout() {
+            setTimeout("printer()", 3000);
+        }
+        function printer() {
+            location.reload();
+        }
+    function HistorialSaldo() {
+        var daym = $('#cboFechaRango :selected').val();
+        var dateini = "";
+        var datefin = "";
+        var _idusuario = $("#playerIdhistorial").val();
+      
+
+        var d = '<tr>' +
+            '<th>Fecha</th>' +
+            '<th>Ingresos</th>' +
+            '<th>Salidas</th>' +
+            '<th>Detalle</th>' +
+            '</tr>';
+
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            contentType: 'application/json',
+            url: "/Home/GetHistorialSaldoUsr/",
+            data: JSON.stringify({ idusuario: _idusuario, altField: dateini, altFieldHasta: datefin, daym: daym }),
+            success: function (data) {
+                console.log(data);
+                $("#TableHistorial").html('');
+                for (var i = 0; i < data.length; i++) {
+
+                    d += '<tr>' +
+                        '<td>' + data[i].FechaFF + '</td>' +
+                        '<td>' + data[i].Monto_Entrada + '</td>' +
+                        '<td>' + data[i].Monto_Salida + '</td>' +
+                        '<td>' + data[i].TipoMovimiento.Descripcion + '</td>' +
+                        '</tr>';
+                }
+
+                $("#TableHistorial").append(d);
+            },
+            error: function (data) {
+
+                showMessageType("danger", "Problemas con la conexíon, !O es el infierno en la tierra o se rompió el server!");
+            }
+
+        })
+    }
+    </script>

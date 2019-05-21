@@ -1,0 +1,114 @@
+﻿@using UxiEntities;
+@model List<OrdenDeCompra>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="~/assets/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+
+<link rel="stylesheet" href="~/assets/jquery-ui-1.11.4.custom/jquery-ui.min.css" type="text/css">
+
+
+
+
+<section class="mbr-section mbr-section-hero mbr-section-md-padding  mbr-section__container--std-top-padding" id="header5-1c" style="background-color: rgb(239, 239, 239);">
+    <div class="container">
+        <div class="row">
+            <div class="mbr-section">
+                <h3 class="mbr-section-title display-3" style="color:dodgerblue">Hola @Session["UserName"], aquí puedes buscar las ultimas ordenes generadas</h3>
+                <div data-form-alert="true">
+
+                </div>
+                <div class="container">
+                    @using (Ajax.BeginForm("Index", "Home", new AjaxOptions { UpdateTargetId = "listOrdens"}))
+                    {
+                    @*<input id="userId" type="hidden" name="country" value="@ViewBag.idUsuario" style="display: none;">*@
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="form_date">Fecha</label>
+                                <div class="input-group date " data-provide="datepicker">
+                                    <input id="datepicker" type="text" class=" form-control">
+                                    <input type="hidden" name="date" id="altField">
+                                    <div class="input-group-addon">
+                                        <span class="ui-icon ui-icon-calendar"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tipoestatus">Estatus</label>
+                                <select id="tipoestatus" class="form-control input-sm" name="ide">
+                                    <option selected value="0">Todos</option>
+                                    @foreach (var est in (List<EstatusOrden>)ViewData["listEstatus"])
+                                    {
+                                        <option value="@est.IdEstatusOC">@est.Descripcion</option>
+                                    }
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="form_user">Id Orden de Compra</label>
+                                <input id="idOrden" type="text" name="idoc" class="form-control" placeholder="">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-md-12">
+                            <input type="submit" value="Buscar" class="btn btn-sm btn-black pull-right" />
+                        </div>
+                    </div>
+                    }
+                </div>
+
+                <hr />
+                <div id="listOrdens" class="table-responsive">
+                    @Html.Partial("_listaOrdenes", Model)
+                </div>
+
+                
+
+            </div>
+        </div>
+    </div>
+    <!--Modal-->
+    <div class="modal fade" id="modalServices" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    </div>
+
+</section>
+
+<script>
+        $.noConflict();  //Not to conflict with other scripts
+        jQuery(document).ready(function ($) {
+            $("#datepicker").datepicker({
+                dateFormat: "dd-M-yy",
+                changeMonth: true,
+                closeText: "Close",
+                altFormat: "yymmdd",
+                altField: "#altField",
+                //changeYear: true,
+                //maxDate: "+0D" //Cuantos dias despues de hoy tengo para seleccionar en el calendario.
+            });
+
+        });
+
+        function showModal() {
+            $("#modalServices").modal('show');
+        }
+
+        function gotoList(response) {
+            if (response.Url != null) {
+                $("#modalServices").modal('hide');
+                window.location.href = response.Url;
+            }
+        }
+</script>
+
+

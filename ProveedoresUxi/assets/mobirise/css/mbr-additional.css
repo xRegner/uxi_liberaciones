@@ -1,0 +1,43 @@
+@import url(https://fonts.googleapis.com/css?family=Ubuntu:400,300,700);
+
+
+#header4-i H1 {
+  color: #cccccc;
+}
+#header4-i P {
+  color: #c1c1c1;
+}
+#header4-i B {
+  color: #efefef;
+}
+#dropdown-menu-2btn-0 .hide-buttons [data-button] {
+  display: none !important;
+}
+#dropdown-menu-2btn-0 .navbar-brand a {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 20px;
+}
+#dropdown-menu-2btn-0 .nav .link,
+#dropdown-menu-2btn-0 .dropdown-item {
+  font-size: 1.2em;
+  color: #000000;
+  font-family: 'Ubuntu', sans-serif;
+}
+#dropdown-menu-2btn-0 .navbar,
+#dropdown-menu-2btn-0 .dropdown-menu {
+  background: #ffc91c;
+}
+#dropdown-menu-2btn-0 .dropdown-menu .dropdown-toggle[aria-expanded="true"],
+#dropdown-menu-2btn-0 .dropdown-menu a:hover,
+#dropdown-menu-2btn-0 .dropdown-menu a:focus {
+  background: #ffc408;
+}
+#dropdown-menu-2btn-0 .navbar-toggler {
+  color: #000000;
+}
+#footer1-f P {
+  color: #000000;
+}
+#form1-k .mbr-header__text {
+  color: #ffffff;
+}

@@ -1,0 +1,16 @@
+﻿@model MvcApplication1.Models.Producto
+@{
+    Layout = null;
+}
+
+
+@using (Html.BeginForm("EjemploForm", "index", FormMethod.Post)) //etiqueta form que va al controller de libros, la función de AltaLibro y con el metodo POST
+{
+    <label>Numero Saga</label>@Html.TextBoxFor(m => m.Nombre) <br />
+
+
+
+    <button type="submit" class="btn btn-orange pull-right">SEND</button>
+
+}
+

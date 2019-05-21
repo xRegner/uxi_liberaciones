@@ -1,0 +1,58 @@
+﻿@using UxiEntities
+@model List<UxiEntities.OrdenDeCompra>
+
+@if (Model.Count > 0)
+{
+    <label>Total:  @Model.Count.ToString() </label>
+}
+    <table id="TableOrdenes" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id Orden</th>
+                <th style="text-align:center">Fecha</th>
+                <th style="text-align:center">Estatus</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="OrdenesBody">
+            @foreach (var odc in Model)
+            {
+                string COLORJI = string.Empty;
+                    <tr>
+                        <td>@odc.IdOrdenCompra</td>
+                        <td style="text-align:center">@odc.FechaOrden.ToString("dd MMM yyyy")</td>
+
+
+                        @{
+                            switch (odc.EstatusDesc)
+                            {
+                                case "ACTIVO":
+                                    COLORJI = "coral";
+
+                                    break;  // Always break each case
+                                case "ACEPTADO":
+                                    COLORJI = "green";
+
+                                    break;  // Always break each case
+                                case "TERMINADO":
+                                    COLORJI = "blue";
+
+                                    break;  // Always break each case
+                                case "CANCELADO":
+                                    COLORJI = "red";
+
+                                    break;  // Always break each case
+                                default:
+                                    COLORJI = "black";
+                                    break;
+                            }
+                        }
+
+                        <td style="text-align:center; color:@COLORJI;">@odc.EstatusDesc</td>
+                        <td style="text-align:center">
+                            @Ajax.ActionLink("Detalle", "_detalleOrden", new { idoc = odc.IdOrdenCompra, ide = odc.IdEstatusOC }, new AjaxOptions { UpdateTargetId = "modalServices", OnComplete = "showModal" }, new { @class = "btn btn-sm btn-black" })                            
+                        </td>
+                    </tr>
+                }
+        </tbody>
+    </table>

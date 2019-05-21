@@ -1,0 +1,65 @@
+﻿@using UxiEntities;
+@*@model List<OrdenDeCompra>*@
+
+    @{
+        var ordenesUsuario = (List<OrdenDeCompra>)ViewData["Ordenes"];
+        var EstatusOrdenes = (List<EstatusOrden>)ViewData["EstatusOrden"];
+    }
+
+    @if(ordenesUsuario != null) {
+        foreach (var lib in ordenesUsuario)
+        {
+            string COLORJI = string.Empty;
+            var email = "email" + lib.IdOrdenCompra;
+            var telefono = "tel" + lib.IdOrdenCompra;
+            var nombre = "nombre" + lib.IdOrdenCompra;
+
+            <tr>
+                <td>@lib.IdOrdenCompra</td>
+                <td>@lib.FechaOrden.ToString("dd MMM yyyy").ToUpper()</td>
+                <td>@lib.Usuario.Email</td>
+                <td>@lib.Total</td>
+
+                @{
+                    switch (lib.EstatusDesc)
+                    {
+                        case "ACTIVO":
+                            COLORJI = "coral";
+
+                            break;  // Always break each case
+                        case "ACEPTADO":
+                            COLORJI = "green";
+
+                            break;  // Always break each case
+                        case "TERMINADO":
+                            COLORJI = "blue";
+
+                            break;  // Always break each case
+                        case "CANCELADO":
+                            COLORJI = "red";
+
+                            break;  // Always break each case
+                        default:
+                            COLORJI = "black";
+                            break;
+                    }
+                }
+
+
+                <td style="color:@COLORJI">@lib.EstatusDesc</td>
+                <td>
+                    <button id="" class="btn-sm" onclick="detalleOrdenAdm(@lib.IdOrdenCompra,@lib.Total,'@lib.IdEstatusOC')">
+                        Detalle
+                    </button>
+                </td>
+                <td>
+                    <button id="" class="btn-sm" onclick="verMensajes(@lib.IdOrdenCompra)">
+                        Mensajes
+                    </button>
+                </td>
+                <input id="@nombre" type="hidden" value="@lib.Usuario.Nombre @lib.Usuario.ApPaterno" style="display: none;">            
+                <input id="@telefono" type="hidden" value="@lib.Usuario.Telefono" style="display: none;">
+                <input id="@email" type="hidden" value="@lib.Usuario.Email" style="display: none;">
+            </tr>
+        }
+    }  

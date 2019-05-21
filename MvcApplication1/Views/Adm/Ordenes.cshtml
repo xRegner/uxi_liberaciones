@@ -1,0 +1,229 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdm.cshtml";
+}
+@using UxiEntities;
+@model List<OrdenDeCompra>
+
+    @*<script type="text/javascript" src="~/Scripts/jquery-3.2.1.js"></script>*@
+    @*<script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.js"></script>*@
+    <script type="text/javascript" src="~/assets/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+
+
+
+    <link rel="stylesheet" href="~/assets/jquery-ui-1.11.4.custom/jquery-ui.min.css" type="text/css">
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">*@
+    @*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>*@
+
+    @{
+        var ordenesUsuario = (List<OrdenDeCompra>)ViewData["Ordenes"];
+        var EstatusOrdenes = (List<EstatusOrden>)ViewData["EstatusOrden"];
+    }
+    <section class="mbr-section mbr-section-hero mbr-section-md-padding" id="header5-1c" style="background-color: rgb(239, 239, 239);">
+        <div class="container">
+            <div class="row">
+                <div class="mbr-section">
+                    <h3 class="mbr-section-title display-3" style="color:dodgerblue">Hola @ViewBag.NombreUsuario, aquí están tus ordenes de Servicio</h3>
+                    <div data-form-alert="true">
+                    </div>
+                    <div class="container">
+                        @using (Ajax.BeginForm("Ordenes", "Adm", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "OrdenesBody", OnBegin = "showWaitPage", OnComplete = "hideWaitPage" }))
+                        {
+                            <input id="userId" type="hidden" value="@ViewBag.idUsuario" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="form_date">Fecha Desde</label>
+                                        <div class="input-group date " data-provide="datepicker">
+                                            <input id="datepicker" type="text" class=" form-control">
+                                            <input type="hidden" name="altField" id="altField">
+                                            <div class="input-group-addon">
+                                                <span class="ui-icon ui-icon-calendar"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="form_date">Fecha Hasta</label>
+                                        <div class="input-group date " data-provide="datepicker">
+                                            <input id="datepickerHasta" type="text" class=" form-control">
+                                            <input type="hidden" name="altFieldHasta" id="altFieldHasta">
+                                            <div class="input-group-addon">
+                                                <span class="ui-icon ui-icon-calendar"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="tipoestatus">Estatus</label>
+                                        <select id="tipoestatus" class="form-control input-sm input-inverse" name="estatus">
+                                            <option selected value="0">Todos los Estatus</option>
+                                            @foreach (var item in EstatusOrdenes)
+                                            {
+                                                <option value="@item.IdEstatusOC">@item.Descripcion</option>
+                                            }
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="form_user">Id Orden de Compra</label>
+                                        <input id="idOrden" type="number" name="ordenCompra" class="form-control" placeholder="">
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="form_user">Email</label>
+                                        <input id="idOrden" type="text" name="email" class="form-control" placeholder="">
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="col-md-12" style="text-align: right;">
+                                    <button class="btn btn-sm btn-black pull-right">Buscar</button>
+                                    <input type="button" value="Exportar Excel" onclick="generaExcel()" class="btn btn-sm btn-black pull-right" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div style="overflow-y: scroll;">
+                        <hr />
+                        <div class="table-responsive">
+                            <table id="TablePedido" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Id Orden de Compra</th>
+                                        <th>Fecha</th>
+                                        <th>Email</th>
+                                        <th>Precio MXN</th>
+                                        <th>Estatus</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="OrdenesBody">
+                                    @Html.Partial("_OrdenesAdm", Model)
+                                </tbody>
+                            </table>
+                        </div>
+                        <hr />
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--Modal-->
+        <div class="modal fade" id="editaPedidoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <div class="com-md-4">
+                            <strong class="com-md-4" id="myModalLabel" style="font-size: x-large;">Orden: 55</strong>
+                            <b class="com-md-4" id="nombreM" style="font-size: larger; margin-left: 4%;">|Christian Benitez</b>
+                            <b class="" id="telM" style="font-size: larger; margin-left: 4%;">|9981373891</b>
+                        </div>
+                        <input id="hiddenIdorden" value="" type="hidden" />
+                        <p id="totalOrden">Total $800 MXN</p>
+                        <p class="" id="emailM">|9981373891</p>
+                        <div class="form-group">
+                            <label for="tipoestatus"><b>Estatus: </b></label>
+                            <select id="tipoestatusModalO" class="form-control input-sm input-inverse" name="estatus">
+                                <option selected value="0">Selecciona Estatus</option>
+                                @foreach (var item in EstatusOrdenes)
+                                {
+                                    <option value="@item.IdEstatusOC">@item.Descripcion</option>
+                                }
+
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="modal-body">
+                        <table id="TablePedido" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Descripción</th>
+                                    <th>IMEI</th>
+                                    <th>$ Precio MXN</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modalBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="modal-message">
+                        <label><b>Mensaje</b></label>
+                        <textarea rows="4" class="messageTextBox form-control" maxlength="512"></textarea>
+                        <button style="margin-top:12px" type="button" onclick="mandarMensaje(this)" class="sendMessageButton btn btn-sm btn-black">Enviar</button>
+                    </div>
+                    <div style="text-align:right; padding-right:10px;">
+                        <button type="button" class="btn btn-sm btn-black" data-dismiss="modal">Cerrar</button>
+                        <button type="button" id="btnSave" onclick="cambiaEstatus()" class="btn btn-sm btn-black">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="verMensajes" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="com-md-4">
+                            <strong class="com-md-4" style="font-size: x-large;">Mensajes</strong>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        </div>
+                    </div>
+                    <div class="modal-message">
+                    <div class="modal-message">
+                    </div>
+                    <div style="text-align:right; padding-right:10px;">
+                        <button type="button" class="btn btn-sm btn-black" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script type="text/javascript" src="~/assets/js/Ordenes.js"></script>
+    <script type="text/javascript" src="~/assets/js/Mensajes.js"></script>
+
+    <script>
+        $.noConflict();  //Not to conflict with other scripts
+        jQuery(document).ready(function ($) {
+            $("#datepicker").datepicker({
+                dateFormat: "dd-M-yy",
+                changeMonth: true,
+                closeText: "Close",
+                altFormat: "yymmdd",
+                altField: "#altField",
+                //changeYear: true,
+                //maxDate: "+0D" //Cuantos dias despues de hoy tengo para seleccionar en el calendario.
+            });
+            $("#datepickerHasta").datepicker({
+                dateFormat: "dd-M-yy",
+                changeMonth: true,
+                closeText: "Close",
+                altFormat: "yymmdd",
+                altField: "#altFieldHasta",
+                //changeYear: true,
+                //maxDate: "+0D" //Cuantos dias despues de hoy tengo para seleccionar en el calendario.
+            });
+
+        });
+
+        function showWaitPage() {
+            $("#whaithingpage").modal("show");
+        };
+
+        function hideWaitPage() {
+            $("#whaithingpage").modal("hide");
+        };
+
+    </script>
+
+

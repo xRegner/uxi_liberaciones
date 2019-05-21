@@ -1,0 +1,164 @@
+﻿@{
+    ViewBag.Title = "Acceso";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="mbr-section mbr-section-hero mbr-section-md-padding" id="header5-1c" style="background-color: rgb(239, 239, 239);">
+
+
+    <div class="container">
+        <div class="row">
+            <div data-form-alert="true">
+                <div class="mbr-section col-md-10">
+                    <form>
+
+                        <h1 class="mbr-section-title display-1" style="color:black">Inicia Sesión</h1>
+                        <p class="mbr-section-lead lead" style="color:gray">Inicia sesión con una cuenta valida...</p>
+                        <div>
+                            <label class="form-control-label"><h1>Email</h1></label>
+                            <input type="text" class="form-control input-sm input-inverse" placeholder="tuemail@dominio.com" maxlength="300" name="email" required="" data-form-field="Email" id="contacts4-9-email">
+                        </div>
+                        <div>
+                            <label class="form-control-label"><h1>Password</h1></label>
+                            <input type="password" class="form-control input-sm input-inverse" maxlength="50" name="pass" required="" data-form-field="Pass" id="contacts4-9-pass">
+
+                        </div>
+                        <br>
+                        <div class="mbr-section-btn"><a class="btn btn-lg btn-primary" onclick="getAccess();">INICIAR SESION</a></div>
+                        <div><a id="LnkRecordar" onclick="Recordar();" style="color:black; font-size:smaller;">Recordar Contraseña</a></div>
+
+                    </form>
+
+                    @if (@ViewBag.UsuarioLeido == true)
+                    {
+                        <h1>Ahora estas dado de alta ya puedes iniciar sesión :)</h1>
+
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="playerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Recordar Password</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="name">Email</label>
+                        <input type="text" class="form-control" id="emailRP" placeholder="Email">
+                    </div>
+
+                </div>
+                <div style="text-align:right; padding-right:10px;">
+                    <button type="button" class="btn btn-sm btn-black" data-dismiss="modal">Cerrar</button>
+                    <button type="button" onclick="fetchPass();" class="btn btn-sm btn-black">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</section>
+
+
+
+
+<script>
+    var ionos = "";
+    var ionam = "";
+    var iokindurs = "";
+    var stryuy = "";
+    function getAccess() {
+        $("#whaithingpage").modal("show");
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            contentType: 'application/json',
+            url: _apiUX + "api/login/",
+            data: JSON.stringify({ Email: $("#contacts4-9-email").val(), Password: $("#contacts4-9-pass").val() }),
+            success: function (data) {
+
+                ionos = data.IdUsuario;
+                ionam = data.Nombre;
+                iokindurs = data.TipoCliente;
+                iovt = data.VerTarifas;
+                stryuy = data.IdRol;
+                $.ajax({
+                    type: "POST",
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    url: "/Index/SessionA",
+                    data: JSON.stringify({ id: ionos, Nombre: ionam, tipoUSR: iokindurs, verTarifas: iovt }),
+                    success: function (data) {
+
+                        if (stryuy == 2) {
+
+                            window.location.replace("/Adm/Index");
+                        }
+                        else {
+                            window.location.href = "/Home/Index";
+                        }
+
+                    },
+                    error: function (data) {
+                        $("#whaithingpage").modal("hide");
+                        showMessageType("danger", "¡tenemos un problema creo que no estas dado de alta!");
+                    }
+
+                })
+            },
+            error: function (data) {
+                $("#whaithingpage").modal("hide");
+                showMessageType("danger", "Problemas con la conexíon, !O es el infierno en la tierra o se rompió el server!");
+            }
+
+        })
+    };
+
+    function Recordar() {
+
+
+        $("#playerModal").modal("show");
+    }
+
+    function fetchPass() {
+
+        var resultado;
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            contentType: 'application/json',
+            url: _apiUX + "api/AdmPass?email=" + $("#emailRP").val().trim(),
+            data: JSON.stringify({ email: $("#emailRP").val() }),
+            success: function (data) {
+
+                resultado = data;
+                if (resultado == false) {
+                    showMessageType("danger", "¡tenemos un problema, no te encontramos en nuestra base de datos!");
+                }
+                if (resultado == true) {
+                    showMessageType("success", "¡Te mandamos un email con tu password!");
+                }
+
+            },
+            error: function (data) {
+                showMessageType("danger", "¡tenemos un problema, no te encontramos en nuestra base de datos!");
+            }
+
+        })
+
+        $("#playerModal").modal("hide");
+
+
+
+        $("#emailRP").val("");
+    }
+</script>

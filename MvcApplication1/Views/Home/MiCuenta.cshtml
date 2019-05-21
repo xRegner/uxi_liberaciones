@@ -1,0 +1,175 @@
+﻿@{
+    ViewBag.Title = "MiCuenta";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+@using UxiEntities;
+@{
+    var ordenesUsuario = (List<Saldos>)ViewData["HistorialMOV"];
+
+}
+<section class="mbr-section mbr-parallax-background mbr-after-navbar" id="form1-q" style="background-image: url(../assets/images/desktop.jpg); padding-top: 120px; padding-bottom: 420px;">
+
+    <div class="mbr-section mbr-section__container mbr-section__container--middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 text-xs-center">
+                    <h1 class="mbr-section-title display-4" style="color:white; background-color:rgba(0, 0, 0, 0.5);">Hola @ViewBag.NombreUsuario.ToString()  bienvenido a tu panel de administración, tu saldo actual es de $@ViewBag.MontoUsr MXN&nbsp;</h1>
+                    <input id="IdUsr" type="hidden" name="VerTarifas" value="@ViewBag.IdUsuario.ToString()" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mbr-section mbr-section-nopadding">
+        <div class="container">
+            <div class="row">
+
+
+
+                <div data-form-alert="true">
+
+                </div>
+
+                <div class="row row-sm-offset">
+
+                    <div class="col-xs-12 col-md-6">
+
+                        <label class="form-control-label" style="background-color:black;" for="form1-q-name">Nueva Contraseña<span class="form-asterisk">*</span></label>
+
+                        <input type="password" class="form-control" name="ApPAterno" required="" data-form-field="apepat" id="form1Pass">
+                    </div>
+
+
+                    <div class="col-xs-12 col-md-6">
+
+                        <label class="form-control-label" style="background-color:black;" for="form1-q-apapaterno">Repetir Contraseña<span class="form-asterisk">*</span></label>
+                        <input type="password" class="form-control" name="ApPAterno" required="" data-form-field="apepat" id="form2Pass">
+
+                    </div>
+
+                </div>
+                <br />
+                <div><button id="BtnChangePss" type="submit" style=" display:block;" onclick="validarPass()" class="btn btn-primary">ENVIAR</button></div>
+            </div>
+
+
+
+        </div>
+        <div class="container" style="background-color:azure;">
+            <div class="row">
+                <div class="col-xs-12 text-xs-center">
+                    <h2 class="mbr-section-title display-2" style="color:white; background-color:rgba(0, 0, 0, 0.5);">Historial de Movimientos</h2>
+
+                    <div class="col-md-4">
+                        <select id="cboFechaRango" name="idc" class="form-control input-sm input-inverse">
+                            <option selected="" value="0">Período</option>
+                            <option value="20">20 días</option>
+                            <option value="30">30 días</option>
+                            <option value="90">90 días</option>
+                        </select>
+                    </div>
+                <div class="col-md-4">
+                    <button id="BtnHistrialSaldo" type="submit" style=" display:block;" onclick="HistorialSaldo()" class="btn btn-sm btn-black">Mostrar</button></div>
+                </div>
+                <div style="overflow-y: scroll:auto;">
+                    <hr />
+                    <div class="table-responsive">
+                        <table id="TableHistorial" class="table table-striped">
+                            <thead>
+                                <tr>
+
+                                    <th>Fecha</th>
+                                    <th>Ingresos</th>
+                                    <th>Salidas</th>
+                                    <th>Detalle</th>
+                                    
+                                </tr>
+                            </thead>
+                           
+                        </table>
+                    </div>
+                    <hr />
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+</section>
+<script>
+
+    function validarPass() {
+        var a = $("#form1Pass").val();
+        var b = $("#form2Pass").val();
+        var idusur = $("#IdUsr").val();
+        
+        if (a == b && a != "" && b != "") {
+            //llamar a la funcion que cambia el password PUT
+
+            $.ajax({
+                type: "PUT",
+                dataType: 'json',
+                contentType: 'application/json',
+                url: _apiUX + "api/AdmPass/?id=" + idusur +"&pass=" + a,
+                data: JSON.stringify({ id: a }),
+                success: function (data) {
+
+                },
+                error: function (data) {
+                    showMessageType("danger", "¡tuvimos un problema!");
+                }
+
+            })
+
+            showMessageType("success", "¡El cambio de password fue exitoso!");
+        }
+        else {
+            showMessageType("danger", "¡Los campos son obligatorios y las contraseñas deben ser iguales!");
+        }
+        $("#form1Pass").val("");
+        $("#form2Pass").val("");
+    }
+    function HistorialSaldo() {
+        var daym = $('#cboFechaRango :selected').val();
+        var dateini ="";
+        var datefin = "";
+
+
+        var d = '<tr>' +
+            '<th>Fecha</th>' +
+            '<th>Ingresos</th>' +
+            '<th>Salidas</th>' +
+            '<th>Detalle</th>' +
+            '</tr>';
+
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            contentType: 'application/json',
+            url: "/Home/GetHistorialSaldo/",
+            data: JSON.stringify({ altField: dateini, altFieldHasta: datefin, daym: daym }),
+            success: function (data) {
+                console.log(data);
+                $("#TableHistorial").html('');
+                for (var i = 0; i < data.length; i++) {
+
+                    d += '<tr>' +
+                        '<td>' + data[i].FechaFF + '</td>' +
+                        '<td>' + data[i].Monto_Entrada + '</td>' +
+                        '<td>' + data[i].Monto_Salida + '</td>' +
+                        '<td>' + data[i].TipoMovimiento.Descripcion + '</td>' +
+                        '</tr>';
+                }
+
+                $("#TableHistorial").append(d);
+            },
+            error: function (data) {
+
+                showMessageType("danger", "Problemas con la conexíon, !O es el infierno en la tierra o se rompió el server!");
+            }
+
+        })
+    }
+</script>

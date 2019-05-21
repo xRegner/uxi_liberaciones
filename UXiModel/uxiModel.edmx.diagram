@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="fc0add7b973145aa8415eaca6c45fcfe" Name="Diagram1" ZoomLevel="82">
+        <EntityTypeShape EntityType="uxisolutionbdModel.UXI_Usuarios" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="uxisolutionbdModel.CuentaUsuario" Width="1.5" PointX="3" PointY="11" />
+        <EntityTypeShape EntityType="uxisolutionbdModel.HistorialSaldos" Width="1.5" PointX="5.25" PointY="10.75" />
+        <EntityTypeShape EntityType="uxisolutionbdModel.TblCategoria" Width="1.5" PointX="0.75" PointY="15.625" />
+        <EntityTypeShape EntityType="uxisolutionbdModel.TblOrdenDeCompra" Width="1.5" PointX="3" PointY="6.625" />
+        <EntityTypeShape EntityType="uxisolutionbdModel.TblRelacionPedimento" Width="1.5" PointX="5.25" PointY="5.25" />
+        <AssociationConnector Association="uxisolutionbdModel.FK_CuentaUsuario_UXI_Usuarios" />
+        <AssociationConnector Association="uxisolutionbdModel.FK_TblOrdenDeCompra_UXI_Usuarios" />
+        <AssociationConnector Association="uxisolutionbdModel.FK_TblRelacionPedimento_TblOrdenDeCompra" />
+        <EntityTypeShape EntityType="uxisolutionbdModel.sysdiagrams" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="uxisolutionbdModel.CAT_EStatusPedimento" Width="1.5" PointX="7.375" PointY="0.875" />
+        <AssociationConnector Association="uxisolutionbdModel.FK_TblOrdenDeCompra_CAT_EStatusPedimento" />
+        <EntityTypeShape EntityType="uxisolutionbdModel.TblServicio_Precio_tipoUsuario" Width="1.5" PointX="7.375" PointY="3.75" />
+        <EntityTypeShape EntityType="uxisolutionbdModel.TblProductos" Width="1.5" PointX="3" PointY="14.875" />
+        <AssociationConnector Association="uxisolutionbdModel.FK_TblProductos_TblCategoria" />
+        <AssociationConnector Association="uxisolutionbdModel.FK_TblRelacionPedimento_TblProductos" />
+        <EntityTypeShape EntityType="uxisolutionbdModel.UXI_Proveedores" Width="1.5" PointX="7.375" PointY="6.75" />
+        <EntityTypeShape EntityType="uxisolutionbdModel.CAT_TiposMovimientos" Width="1.5" PointX="9.375" PointY="0.875" />
+        <EntityTypeShape EntityType="uxisolutionbdModel.MensajesOrdenes" Width="1.5" PointX="9.375" PointY="3.75" />
+        <AssociationConnector Association="uxisolutionbdModel.FK__Historial__IDTip__778AC167" />
+        <AssociationConnector Association="uxisolutionbdModel.FK__Historial__IdUsu__7B5B524B" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

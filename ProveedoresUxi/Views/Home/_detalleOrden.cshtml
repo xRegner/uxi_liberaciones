@@ -1,0 +1,73 @@
+﻿@using UxiEntities
+@model UxiEntities.OrdenDeCompraDetalle
+
+@{
+    var index = 0;
+}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+@using (Ajax.BeginForm(new AjaxOptions { UpdateTargetId = "modalServices", OnSuccess = "gotoList" }))
+{
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel"><b>Detalle de la orden @Model.IdOrdenCompra</b></h4>
+            <p>
+                <label for="tipoestatus">Estatus</label>
+                <select id="tipoestatus" class="form-control input-sm" name="IdEstatus">
+                    @foreach (var est in (List<EstatusOrden>)ViewData["listEstatus"])
+                    {
+                        if (est.IdEstatusOC == Model.IdEstatus)
+                        {
+                            <option selected value="@est.IdEstatusOC">@est.Descripcion</option>
+                        }
+                        else
+                        {
+                            <option value="@est.IdEstatusOC">@est.Descripcion</option>
+                        }
+                    }
+                </select>
+            </p>
+        </div>
+        <div class="modal-body">
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class="col-md-12">
+                    <table id="TableServicios" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Descripción</th>
+                                <th>IMEI</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modalBody">
+                            @foreach (var pro in Model.Productos)
+                            {
+                                <tr>
+                                    <td>@pro.Producto.Descripcion_Corta</td>
+                                    <td>@pro.Producto.IMEI</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div style="text-align:right; padding-right:10px;">
+                        <button type="button" class="btn btn-sm btn-black" data-dismiss="modal">Cerrar</button>
+                        <input type="submit" value="Actualizar" class="btn btn-sm btn-black pull-right" />
+                    </div>
+                </div>
+            </div>
+            <input id="IdOrden" name="IdOrdenCompra" type="hidden" value="@Model.IdOrdenCompra" />
+            @foreach (var pro in Model.Productos)
+            {
+            <input id="Descripcion_@pro.Producto.IdProducto" name="Productos[@index].Producto.Descripcion_Corta" type="hidden" value="@pro.Producto.Descripcion_Corta" />
+            <input id="IMEIA_@pro.Producto.IdProducto" name="Productos[@index].Producto.IMEI" type="hidden" value="@pro.Producto.IMEI" />
+            index++;
+            }
+        </div>
+}
+            </div>
+        </div>

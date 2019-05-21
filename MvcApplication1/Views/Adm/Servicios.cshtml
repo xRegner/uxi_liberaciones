@@ -1,0 +1,107 @@
+﻿@using UxiEntities
+@model List<UxiEntities.Servicios>
+
+@{
+    ViewBag.Title = "ServiciosAdm";
+    Layout = "~/Views/Shared/_LayoutAdm.cshtml";
+}
+
+<section class="mbr-section mbr-section-hero mbr-section-md-padding" id="header5-1c" style="background-color: rgb(239, 239, 239);">
+    <div class="container">
+        <div class="row">
+            <div class="mbr-section">
+
+                <h1 class="mbr-section-title display-1" style="color:dodgerblue">Gestión de Servicios</h1>
+
+                <div data-form-alert="true">
+                </div>
+
+                <div>
+                    <h4>En esta sección puedes agregar, modificar o eliminar la información de los servicios disponibles...</h4>
+                    <hr />
+                </div>
+                @using (Ajax.BeginForm("Servicios", "Adm", new AjaxOptions { UpdateTargetId = "listServices", OnBegin="showWaitPage", OnComplete="hideWaitPage" }))
+                {
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="form_status">Estatus</label>
+                            <select id="cboEstatus" name="sta" class="form-control input-sm input-inverse">
+                                <option selected value="">Todos</option>
+                                <option value="true">Activo</option>
+                                <option value="false">Inactivo</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="form_status">Descripción</label>
+                            <input id="txtDescripcion" type="text" name="des" class="form-control" placeholder="">
+                            <div class="help-block with-errors"></div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="form_status">Categoria</label>
+                            <select id="cboCategoria" name="idc" class="form-control input-sm input-inverse">
+                                <option selected value="0">Todas</option>
+                                @foreach (var cat in (List<Categoria>)ViewData["listCategoria"])
+                                {
+                                    <option value="@cat.IdCategoria">@cat.Descripcion</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="mbr-buttons mbr-buttons" style="text-align:right">
+                        <input type="submit" value="Buscar" class="btn btn-sm btn-black pull-right" />
+                        @Ajax.ActionLink("Agregar", "_agregarServicio",null,new AjaxOptions { UpdateTargetId = "modalService", OnComplete = "showModal" }, new { @class = "btn btn-sm btn-black"})
+                        @*<button class="btn btn-sm btn-black pull-right" onclick="addService()">Agregar</button>*@
+                    </div>
+                </div>
+                }
+                <hr />
+                <div id="listServices">
+                    @Html.Partial("_listaServicios", Model)                    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <!--Modal-->
+    <div class="modal fade" id="modalService" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">        
+    </div>
+    
+</section>
+
+<script>
+
+    jQuery(document).ready(function ($) {
+        @{
+            var Users = (Message)ViewBag.Message;
+        }
+        if ('@Users.hasMessage' == 'True'){
+            showMessageType('success', '@ViewBag.Message.strMessage', 1)
+        }
+
+    });
+
+    function showModal() {
+        $("#modalService").modal('show');
+    }
+
+    function gotoSearch(response) {
+        if (response.Url != null) {
+            $("#modalService").modal('hide');
+            window.location.href = response.Url;
+        }
+    }
+
+    function showWaitPage() {
+        $("#whaithingpage").modal("show");
+    }
+
+    function hideWaitPage() {
+        $("#whaithingpage").modal("hide");
+    }
+</script>
+
+    

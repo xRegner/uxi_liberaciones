@@ -1,0 +1,85 @@
+﻿@using UxiEntities;
+@using System.Globalization;
+@*@model List<OrdenDeCompra>*@
+
+@{
+    var ordenesUsuario = (List<OrdenServicioDetalle>)ViewData["Ordenes"];
+    var OrdenesAgrupadas =(List<IGrouping<int, OrdenServicioDetalle>>)ViewData["OrdenesAgrupadas"];
+}
+<style>
+    table, td {
+        border: 1px solid #7a7777;
+    }
+</style>
+
+<div class="table-responsive">
+    <table id="TablePedido" class="table table-striped" style="border-color:gray" cellpadding="3">
+        <thead style="height:25px;text-align:center">
+            <tr>
+                <th style="background-color:slategray; text-align:center; color:white; font-size:medium">Modelo</th>
+                <th style="background-color:slategray; text-align:center; color:white; font-size:medium">Precio Unit</th>
+                <th style="background-color:slategray; text-align:center; color:white; font-size:medium">Unidades</th>
+                <th style="background-color:slategray; text-align:center; color:white; font-size:medium">Total</th>
+            </tr>
+        </thead>
+        <tbody id="OrdenesBody">
+
+            @if (OrdenesAgrupadas != null)
+            {
+                foreach (var lib in OrdenesAgrupadas)
+                {
+                    <tr>
+                        <td>@lib.FirstOrDefault().Descripcion_Corta</td>
+                        <td>@string.Format("{0:C}", lib.FirstOrDefault().Total)</td>
+                        <td>@lib.Count()</td>
+                        <td>@string.Format("{0:C}", lib.Sum(x => x.Total))</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<hr />
+
+<div class="table-responsive">
+    <table id="TablePedido" class="table table-striped" style="border-color:gray" cellpadding="3">
+        <thead style="height:25px;text-align:center">
+            <tr>
+                <th style="background-color:slategray; text-align:center; color:white; font-size:medium">Id Orden de Compra</th>
+                <th style="background-color:slategray; text-align:center; color:white; font-size:medium">Email</th>
+                <th style="background-color:slategray; text-align:center; color:white; font-size:medium">Fecha</th>
+                <th style="background-color:slategray; text-align:center; color:white; font-size:medium">Estatus</th>
+                <th style="background-color:slategray; text-align:center; color:white; font-size:medium">Descripcion Corta</th>
+                <th style="background-color:slategray; text-align:center; color:white; font-size:medium">Descripcion Larga</th>
+                <th style="background-color:slategray; text-align:center; color:white; font-size:medium">IMEI</th>
+                <th style="background-color:slategray; text-align:center; color:white; font-size:medium">Precio MXN</th>
+
+            </tr>
+        </thead>
+        <tbody id="OrdenesBody">
+
+            @if (ordenesUsuario != null)
+            {
+                foreach (var lib in ordenesUsuario)
+                {
+                    <tr>
+                        <td>@lib.IdOrdenCompra</td>
+                        <td>@lib.email</td>
+                        <td>@lib.FechaOrden.ToString("dd MMM yyyy").ToUpper()</td>
+                        <td>@lib.descripcion</td>
+                        <td>@lib.Descripcion_Corta</td>
+                        <td>@lib.Descripcion_Larga</td>
+                        <td style="text-align:center;font-size:small;font-family:Arial;">@string.Format("{0:30}-", lib.IMEI)</td>
+                        <td>@string.Format("{0:C}", lib.Total)</td>
+                    </tr>
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>
+
+
+                   

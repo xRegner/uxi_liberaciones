@@ -1,0 +1,411 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+<section class="mbr-section mbr-section-hero mbr-section-md-padding" id="header5-1c" style="background-color: rgb(239, 239, 239);">
+
+    <div>
+        <div class="container">
+            <div class="row">
+                <div class="mbr-section">
+
+
+                    <h1 class="mbr-section-title display-1" style="color:black">Bienvenido</h1>
+                    <p class="mbr-section-lead" style="color:gray">@ViewBag.NombreUsuario.ToString().ToUpper() actualmente tu saldo es de   $ @ViewBag.MontoUsr MXN</p>
+                    <p class="hero__subtext lead" style="color:dodgerblue">Para tener saldo a favor comunicate con nosotros por email <span class="socicon-mail"></span> contacto@uxisolutions.com, o whatsapp <span class="socicon-whatsapp"> al +52 1 55 5213 53 96</span> </p>
+
+                    <div data-form-alert="true">
+
+                    </div>
+                    <div>
+                        <label class="form-control-label" for="contacts4-9-email"><h1>Lista de Servicios</h1></label>
+                        @Html.DropDownList("ServiciosDDL", (IEnumerable<SelectListItem>)ViewBag.Servicios, "Servicios", new { @class = "form-control input-sm input-inverse" })
+                        <br />
+                        <div class="mbr-buttons mbr-buttons"><button id="btnAgregar" class="btn btn-sm btn-black">Agregar Servicio</button></div>
+                        <hr />
+
+                        <div style=" overflow-y scroll;">
+                            <input id="countBox" value="1" type="hidden" />
+                            <table id="TableofOC" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th style="display:none;">SKU</th>
+                                        <th>Descripción</th>
+                                        <th>$Precio MXN</th>
+                                        <th>IMEI</th>
+                                        <th style="display:none;">IMEI</th>
+                                        <th>Action</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="HistoryBodyA"></tbody>
+                            </table>
+                        </div>
+                        <hr />
+                        <div class="mbr-buttons mbr-buttons"><button id="btnAgregarOrden" style=" display:none;" class="btn btn-sm btn-black">Generar Orden de Servicio</button></div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal btn-loader" id="whaithingpage" tabindex="-1" aria-hidden="true">
+</div>
+
+
+<script>
+
+
+    $("#btnAgregarOrden").click(function () {
+        var subtotal = 0;
+        $("#TableofOC tbody tr").each(function (index) {
+            $(this).children("td").each(function (index2) {
+                switch (index2) {
+                    case 0:
+                        campo1 = $(this).text();
+                        break;
+                    case 1:
+                        campo2 = $(this).text();
+                        break;
+                    case 2:
+                        campo3 = $(this).text();
+                        break;
+                    case 3:
+                        campo4 = $(this).text();
+                        break;
+                }
+            })
+
+            subtotal = parseFloat(subtotal) + parseFloat(campo4);
+        })
+        if (subtotal > 0  && subtotal < @ViewBag.MontoUsr){
+            $("#whaithingpage").modal("show");
+        var request = subtotal+"|";
+        CompleteRequest(request);
+        //$.ajax({
+        //    type: "POST",
+        //    dataType: 'json',
+        //    contentType: 'application/json',
+        //    url: "/Home/InsertaOrdenServicio",
+        //    data: JSON.stringify({ total: subtotal }),
+        //    success: function (data) {
+
+
+        //        ingresaODC(data.IdOrdenCompra);
+
+        //    },
+        //    error: function (data) {
+        //        showMessageType("warning", "¡tuvimos un problema!");
+        //    }
+        //})
+    }
+    else{
+            showMessageType("warning", "¡Haz superado el limite de credito!");
+    }
+
+
+
+    });
+
+    $("#btnAgregar").click(function () {
+        var total = 0;
+
+        var SKU = "";
+        var Desc = "";
+        var precio = "";
+        var id = "";
+        var acumulado = 0;
+
+
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            contentType: 'application/json',
+            url: "/Home/GetServicio",
+            data: JSON.stringify({ idProd: $('#ServiciosDDL :selected').val() }),
+            success: function (data) {
+
+                if (data.length > 0) {
+
+
+                    SKU = data[0].SKU;
+                    Desc = data[0].Descripcion_Larga
+                    precio = data[0].PrecioNeto
+                    id = data[0].IdProducto
+
+
+                }
+
+                $("#TableofOC tbody").append(
+
+                    "<tr'><td>" + id + "</td>" +
+                    "<td style='display:none;'>" + SKU + "</td>" +
+                    "<td>" + Desc + "</td>" +
+                    "<td id='numero'>" + precio + "</td>" +
+                    "<td><input type='text' maxlength=15' class='form- control'  data-form-field='apepat'  id='txtIMEI" + $("#countBox").val() + "'> </td>" +
+                    "<td style='display:none;'>txtIMEI" + $("#countBox").val()+" </td>"+
+                    "<td><a class='btnDelete'>Quitar</a></td>" +
+                    "</tr>");
+                var i = parseInt($("#countBox").val());
+                $("#countBox").val(i+1);
+
+                $(".btnDelete").bind("click", function () {
+                    var par = $(this).parent().parent();
+                    //$(this).parent().parent().find("#numero").html();
+                    par.remove();
+                });
+
+                visible_div();
+
+
+            },
+            error: function (data) {
+                showMessageType("warning", "¡Debes seleccionar una opción valida!");
+            }
+        });
+
+
+    });
+
+    function visible_div() {
+        var elemento = document.getElementById("btnAgregarOrden");
+        elemento.style.display = 'block';
+    };
+
+    function noVisible_div() {
+        var elemento = document.getElementById("btnAgregarOrden");
+        elemento.style.display = 'none';
+    };
+
+    function edit_rows() {
+
+        var resultado = 0;
+        var par = $(this).parent().parent();
+
+
+        //$(this).parent().parent().find("#numero").html();
+        //resultado = $(this).parent().parent().find("#numero").html();
+
+        par.remove();
+        alert(par.html());
+
+
+    };
+
+    function CompleteRequest(request)
+    {
+        var imeiErrors = false;
+        var precio = 0;
+        $("#TableofOC tbody tr").each(function (index) {
+            $(this).children("td").each(function (index2) {
+                switch (index2) {
+                    case 0:
+                        a = $(this).text();
+                        break;
+                    case 1:
+                        b = $(this).text();
+                        break;
+                    case 2:
+                        c = $(this).text();
+                        break;
+                    case 3:
+                        d = $(this).text();
+                        break;
+                    case 4:
+                        e = $(this).text();
+                        break;
+                    case 5:
+                        f = $(this).text();
+                        break;
+                }
+                $(this).css("background-color", "#ECF8E0");
+
+
+            })
+
+            var innerSeparator = ">";
+            var id = "#" + f;
+            var control = $(''+id+'');
+            control.removeClass("inputError");
+            var imei = $(''+id+'').val();
+            if(IsValidImei(imei))
+            {
+                request+=d+innerSeparator+a+innerSeparator+imei+innerSeparator+b+"|";
+            }
+            else
+            {
+                imeiErrors = true;
+                $("#whaithingpage").modal("hide");
+                control.addClass("inputError");
+                showMessageType("danger", "¡Algún IMEI es incorrecto!");
+            }
+        })
+        if(!imeiErrors)
+        {
+            SendOrderRequest(request);
+
+
+            LimpiarTodo(odgc);
+        }
+    };
+
+    function SendOrderRequest(request)
+    {
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            contentType: 'application/json',
+            url: "/Home/InsertOrderRequest",
+            data: JSON.stringify({ request: request  }),
+            success: function (data) {
+                $("#whaithingpage").modal("hide");
+                showMessageType("success", "¡Orden Generada!");
+                Clear();
+
+            },
+            error: function (data) {
+                $("#whaithingpage").modal("hide");
+                showMessageType("danger", "¡tuvimos un problema!");
+            }
+
+        })
+    }
+
+    function ingresaODC(odgc)
+    {
+
+        var precio = 0;
+        $("#TableofOC tbody tr").each(function (index) {
+            $(this).children("td").each(function (index2) {
+                switch (index2) {
+                    case 0:
+                        a = $(this).text();
+                        break;
+                    case 1:
+                        b = $(this).text();
+                        break;
+                    case 2:
+                        c = $(this).text();
+                        break;
+                    case 3:
+                        d = $(this).text();
+                        break;
+                    case 4:
+                        e = $(this).text();
+                        break;
+                    case 5:
+                        f = $(this).text();
+                        break;
+                }
+                $(this).css("background-color", "#ECF8E0");
+
+
+            })
+
+
+            var id = "#" + f;
+            var imei = $(''+id+'').val();
+            $.ajax({
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/json',
+                url: "/Home/InsertaOrdenServicioDetalle",
+                data: JSON.stringify({ _odc: odgc, _monto: d, _idProd:a, _Imei:imei, _sku:b  }),
+                success: function (data) {
+
+                },
+                error: function (data) {
+                    showMessageType("danger", "¡tuvimos un problema!");
+                }
+
+            })
+        })
+        $("#whaithingpage").modal("hide");
+        showMessageType("success", "¡Orden Generada!");
+
+        LimpiarTodo(odgc);
+    };
+
+    function LimpiarTodo(odgc)
+    {
+        noVisible_div();
+        $("#countBox").val("1");
+        $("#TableofOC tbody").empty();
+        $('#ServiciosDDL').val($('#ServiciosDDL > option:first').val());
+        $('#countBox').val(1);
+        enviamail(odgc);
+        testtimeout();
+
+    }
+
+    function Clear()
+    {
+        noVisible_div();
+        $("#countBox").val("1");
+        $("#TableofOC tbody").empty();
+        $('#ServiciosDDL').val($('#ServiciosDDL > option:first').val());
+        $('#countBox').val(1);
+        testtimeout();
+
+    }
+    function testtimeout() {
+        setTimeout("printer()", 3000);
+    }
+    function printer() {
+        location.reload();
+    }
+
+    function enviamail(idodcq)
+    {
+
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            contentType: 'application/json',
+            url: "/Home/InsertaMandaMail",
+            data: JSON.stringify({ _odc: idodcq}),
+            success: function (data) {
+
+            },
+            error: function (data) {
+
+            }
+
+        })
+    }
+
+    function IsValidImei(imei)
+    {
+        if (typeof(imei)===undefined || imei === "" || !imei || 0===imei.length)
+            return false;
+        if (imei.length != 15)
+            return false;
+        else
+        {
+            if (/[^ 0 - 9 -\s] +/.test(imei)) return false;
+
+            var nCheck = 0; var nDigit = 0; var bEven = false;
+            for (var n = imei.length - 1; n >= 0; n--)
+            {
+                var cDigit = imei.charAt(n),
+                      nDigit = parseInt(cDigit, 10);
+
+                if (bEven)
+                {
+                    if ((nDigit *= 2) > 9) nDigit -= 9;
+                }
+
+                nCheck += nDigit;
+                bEven = !bEven;
+            }
+
+            return (nCheck % 10) == 0;
+        }
+    }
+</script>

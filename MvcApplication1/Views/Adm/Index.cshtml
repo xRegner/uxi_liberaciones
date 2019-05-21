@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdm.cshtml";
+}
+
+<section class="mbr-section mbr-section-hero mbr-section-md-padding mbr-section-with-arrow mbr-after-navbar" id="header5-1c" style="color:dodgerblue">
+
+    <div>
+        <div class="container">
+            <div class="row">
+                <div class="mbr-section">
+
+
+                    <h1 class="mbr-section-title display-1" style="color:dodgerblue">Bienvenido Administrador</h1>
+                    <div data-form-alert="true">
+
+                    </div>
+                    <div style="color:black;">
+                        <h3>En esta sección vamos a tener un dashboard del número de ordenes de compra y Usuarios así como accesos rapidos</h3>
+                        <hr />
+
+                        <div class="mbr-buttons mbr-buttons"><button id="btnAgregarOrden" style=" display:none;" class="btn btn-sm btn-black">Generar Orden de Servicio</button></div>
+                    </div>
+
+                    <h1>Top 10 Usuarios con más retorno</h1>
+
+                    <div id="chartContainer" style="height: 400px; width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    window.onload = function () {
+     
+        var dateini = "";
+        var datefin = "";
+        var dps = new Array();
+        $.ajax({
+            type: "GET",
+            dataType: 'json',
+            contentType: 'application/json',
+            url: _apiUX + "api/uxiBI/",
+            data: JSON.stringify({ FechaIni: dateini, FechaFin: datefin }),
+            success: function (data) {
+
+               
+
+                for (i = 0; i < data.length; i++) {
+                    dps.push({ x: (10 * (i + 1)), y: data[i].Total, label: data[i].Email.toLowerCase() });
+
+                }
+               
+                var chart = new CanvasJS.Chart("chartContainer", {
+
+                    dataPointWidth: 30,
+                    theme: "theme1",
+                    data: [{
+                        type: "pie",
+                        indexLabelLineThickness: 2,
+                        dataPoints: dps
+                    }]
+                });
+
+
+
+                chart.render();
+
+
+            },
+            error: function (data) {
+                showMessageType("danger", "¡tuvimos un problema!");
+            }
+
+        })
+
+
+    }
+</script>
+<script src="~/assets/js/canvasjs.min.js"></script>

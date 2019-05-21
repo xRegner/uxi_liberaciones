@@ -1,0 +1,46 @@
+﻿@using UXiModel
+@model UXiModel.UXI_Proveedores
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="mbr-box mbr-section mbr-section--relative mbr-section--fixed-size mbr-section--full-height mbr-section--bg-adapted mbr-parallax-background" id="header4-i" data-rv-view="0" style="background-image: url(../assets/images/mbr-1707x1080.jpg);">
+    <div class="mbr-box__magnet mbr-box__magnet--sm-padding mbr-box__magnet--center-center mbr-after-navbar">
+        <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(34, 34, 34);"></div>
+        <div class="mbr-box__container mbr-section__container container">
+            <div class="mbr-box mbr-box--stretched">
+                <div class="mbr-box__magnet mbr-box__magnet--center-center">
+                    <div class="row">
+                        <div class=" col-sm-8 col-sm-offset-2">
+                            <div class="mbr-hero animated fadeInUp">
+                                <h1 class="mbr-hero__text">Portal de proveedores UXI</h1>
+                                <p class="mbr-hero__subtext">Somos expertos trabajando XD</p>
+                            </div>
+                            @using (Html.BeginForm("Index", "Index", FormMethod.Post))
+                            {
+                                <div>
+                                    <input type="text" class="form-control  input-inverse" placeholder="tuemail@dominio.com" maxlength="300" name="Email" required="" data-form-field="Email" id="contacts4-9-email">
+                                </div>
+                                <br />
+                                <div>
+                                    <input type="password" class="form-control  input-inverse" placeholder="Password" maxlength="50" name="Password" required="" data-form-field="Pass" id="contacts4-9-pass">
+                                </div>
+                                <br />
+                                <br />
+                                <div class="mbr-buttons btn-inverse mbr-buttons--center">
+                                    <input type="submit" class="mbr-buttons__btn btn btn-lg animated fadeInUp delay btn-default" value="Acceso Proveedores" />
+                                </div>
+                            }        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mbr-arrow mbr-arrow--floating text-center">
+
+        </div>
+    </div>
+</section>
+

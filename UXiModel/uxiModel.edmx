@@ -1,0 +1,1235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="uxisolutionbdModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CAT_EStatusPedimento">
+          <Key>
+            <PropertyRef Name="IdEstatusOC" />
+          </Key>
+          <Property Name="IdEstatusOC" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="UUM" Type="int" />
+          <Property Name="FUM" Type="date" />
+        </EntityType>
+        <EntityType Name="CAT_TiposMovimientos">
+          <Key>
+            <PropertyRef Name="IDTipoMovimiento" />
+          </Key>
+          <Property Name="IDTipoMovimiento" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CuentaUsuario">
+          <Key>
+            <PropertyRef Name="IdCuentaUsuario" />
+          </Key>
+          <Property Name="IdCuentaUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="SaldoAFavor" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="UUM" Type="int" />
+          <Property Name="FUM" Type="datetime" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HistorialSaldos">
+          <Key>
+            <PropertyRef Name="IdHistorial" />
+          </Key>
+          <Property Name="IdHistorial" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Fecha" Type="date" />
+          <Property Name="IDTipoMovimiento" Type="int" Nullable="false" />
+          <Property Name="UUM" Type="int" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" />
+          <Property Name="Monto_Entrada" Type="money" Nullable="false" />
+          <Property Name="Monto_Salida" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MensajesOrdenes">
+          <Key>
+            <PropertyRef Name="IdMensaje" />
+          </Key>
+          <Property Name="IdMensaje" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="IdOrdenCompra" Type="int" Nullable="false" />
+          <Property Name="Mensaje" Type="varchar(max)" Nullable="false" />
+          <Property Name="Fecha_Alta" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="TblCategoria">
+          <Key>
+            <PropertyRef Name="IdCategoria" />
+          </Key>
+          <Property Name="IdCategoria" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DescCategoria" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FUM" Type="date" />
+          <Property Name="UUM" Type="int" />
+          <Property Name="Activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="TblOrdenDeCompra">
+          <Key>
+            <PropertyRef Name="IdOrdenCompra" />
+          </Key>
+          <Property Name="IdOrdenCompra" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="IdZona" Type="int" />
+          <Property Name="ReferenciaBancaria" Type="varchar" MaxLength="50" />
+          <Property Name="Total" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="IdEstatusOC" Type="int" Nullable="false" />
+          <Property Name="FechaOrden" Type="date" Nullable="false" />
+          <Property Name="FechaPagoMax" Type="date" Nullable="false" />
+          <Property Name="FUM" Type="date" />
+          <Property Name="UUM" Type="int" />
+        </EntityType>
+        <EntityType Name="TblProductos">
+          <Key>
+            <PropertyRef Name="IdProducto" />
+          </Key>
+          <Property Name="IdProducto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SKU" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Descripcion_Corta" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="Descripcion_Larga" Type="varchar" MaxLength="500" />
+          <Property Name="IdCategoria" Type="int" />
+          <Property Name="IdProveedor" Type="int" />
+          <Property Name="FacturaProveedor" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PrecioNeto" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="Ubicacion" Type="varchar" MaxLength="500" />
+          <Property Name="FUM" Type="date" />
+          <Property Name="UUM" Type="int" />
+          <Property Name="Activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="TblRelacionPedimento">
+          <Key>
+            <PropertyRef Name="IdODC" />
+          </Key>
+          <Property Name="IdODC" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdOrdenCompra" Type="int" Nullable="false" />
+          <Property Name="IdProducto" Type="int" Nullable="false" />
+          <Property Name="SKU" Type="varchar" MaxLength="50" />
+          <Property Name="PrecioNeto" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="PrecioVenta" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="IdDescuento" Type="int" Nullable="false" />
+          <Property Name="Total" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="FechaPedimento" Type="date" Nullable="false" />
+          <Property Name="IdEstatusPedimento" Type="int" Nullable="false" />
+          <Property Name="IMEI" Type="varchar" MaxLength="500" />
+          <Property Name="UUM" Type="int" />
+          <Property Name="FUM" Type="date" />
+        </EntityType>
+        <EntityType Name="TblServicio_Precio_tipoUsuario">
+          <Key>
+            <PropertyRef Name="IDServicioPrecioUsuario" />
+          </Key>
+          <Property Name="IDServicioPrecioUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdProducto" Type="int" Nullable="false" />
+          <Property Name="TipoCliente" Type="int" Nullable="false" />
+          <Property Name="Precio" Type="numeric" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="UXI_Proveedores">
+          <Key>
+            <PropertyRef Name="IdProveedor" />
+          </Key>
+          <Property Name="IdProveedor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApPaterno" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Telefono" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+          <Property Name="UUM" Type="int" Nullable="false" />
+          <Property Name="FUM" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UXI_Usuarios">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdRol" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApPaterno" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApMaterno" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Telefono" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FUM" Type="datetime" Nullable="false" />
+          <Property Name="UUM" Type="int" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+          <Property Name="TipoCliente" Type="int" />
+          <Property Name="VerTarifas" Type="bit" />
+        </EntityType>
+        <Association Name="FK__Historial__IDTip__778AC167">
+          <End Role="CAT_TiposMovimientos" Type="Self.CAT_TiposMovimientos" Multiplicity="1" />
+          <End Role="HistorialSaldos" Type="Self.HistorialSaldos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CAT_TiposMovimientos">
+              <PropertyRef Name="IDTipoMovimiento" />
+            </Principal>
+            <Dependent Role="HistorialSaldos">
+              <PropertyRef Name="IDTipoMovimiento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Historial__IdUsu__7B5B524B">
+          <End Role="UXI_Usuarios" Type="Self.UXI_Usuarios" Multiplicity="0..1" />
+          <End Role="HistorialSaldos" Type="Self.HistorialSaldos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UXI_Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="HistorialSaldos">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CuentaUsuario_UXI_Usuarios">
+          <End Role="UXI_Usuarios" Type="Self.UXI_Usuarios" Multiplicity="1" />
+          <End Role="CuentaUsuario" Type="Self.CuentaUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UXI_Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="CuentaUsuario">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TblOrdenDeCompra_CAT_EStatusPedimento">
+          <End Role="CAT_EStatusPedimento" Type="Self.CAT_EStatusPedimento" Multiplicity="1" />
+          <End Role="TblOrdenDeCompra" Type="Self.TblOrdenDeCompra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CAT_EStatusPedimento">
+              <PropertyRef Name="IdEstatusOC" />
+            </Principal>
+            <Dependent Role="TblOrdenDeCompra">
+              <PropertyRef Name="IdEstatusOC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TblOrdenDeCompra_UXI_Usuarios">
+          <End Role="UXI_Usuarios" Type="Self.UXI_Usuarios" Multiplicity="1" />
+          <End Role="TblOrdenDeCompra" Type="Self.TblOrdenDeCompra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UXI_Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="TblOrdenDeCompra">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TblProductos_TblCategoria">
+          <End Role="TblCategoria" Type="Self.TblCategoria" Multiplicity="0..1" />
+          <End Role="TblProductos" Type="Self.TblProductos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblCategoria">
+              <PropertyRef Name="IdCategoria" />
+            </Principal>
+            <Dependent Role="TblProductos">
+              <PropertyRef Name="IdCategoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TblRelacionPedimento_TblOrdenDeCompra">
+          <End Role="TblOrdenDeCompra" Type="Self.TblOrdenDeCompra" Multiplicity="1" />
+          <End Role="TblRelacionPedimento" Type="Self.TblRelacionPedimento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblOrdenDeCompra">
+              <PropertyRef Name="IdOrdenCompra" />
+            </Principal>
+            <Dependent Role="TblRelacionPedimento">
+              <PropertyRef Name="IdOrdenCompra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TblRelacionPedimento_TblProductos">
+          <End Role="TblProductos" Type="Self.TblProductos" Multiplicity="1" />
+          <End Role="TblRelacionPedimento" Type="Self.TblRelacionPedimento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblProductos">
+              <PropertyRef Name="IdProducto" />
+            </Principal>
+            <Dependent Role="TblRelacionPedimento">
+              <PropertyRef Name="IdProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="GetODCbyODC" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idOdc" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetODCbyUsr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idUsur" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getOrdenesDeCompra" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdOrdenCompra" Type="int" Mode="In" />
+          <Parameter Name="FechaOrdenD" Type="date" Mode="In" />
+          <Parameter Name="FechaOrdenH" Type="date" Mode="In" />
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="getOrdenesDeCompraServicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdOrdenCompra" Type="int" Mode="In" />
+          <Parameter Name="FechaOrdenD" Type="date" Mode="In" />
+          <Parameter Name="FechaOrdenH" Type="date" Mode="In" />
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_getMensajesOrdenes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdOrdenCompra" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_getOrderDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdOrdenCompra" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_getServicesXParam" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdProducto" Type="int" Mode="In" />
+          <Parameter Name="IdCategoria" Type="int" Mode="In" />
+          <Parameter Name="Activo" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SPBI_TOP10USR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Fecha_ini" Type="date" Mode="In" />
+          <Parameter Name="Fecha_Fin" Type="date" Mode="In" />
+        </Function>
+        <Function Name="SPU_GetUsuarioCuenta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="uxisolutionbdModelStoreContainer">
+          <EntitySet Name="CAT_EStatusPedimento" EntityType="Self.CAT_EStatusPedimento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CAT_TiposMovimientos" EntityType="Self.CAT_TiposMovimientos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CuentaUsuario" EntityType="Self.CuentaUsuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HistorialSaldos" EntityType="Self.HistorialSaldos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MensajesOrdenes" EntityType="Self.MensajesOrdenes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TblCategoria" EntityType="Self.TblCategoria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TblOrdenDeCompra" EntityType="Self.TblOrdenDeCompra" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TblProductos" EntityType="Self.TblProductos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TblRelacionPedimento" EntityType="Self.TblRelacionPedimento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TblServicio_Precio_tipoUsuario" EntityType="Self.TblServicio_Precio_tipoUsuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UXI_Proveedores" EntityType="Self.UXI_Proveedores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UXI_Usuarios" EntityType="Self.UXI_Usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Historial__IDTip__778AC167" Association="Self.FK__Historial__IDTip__778AC167">
+            <End Role="CAT_TiposMovimientos" EntitySet="CAT_TiposMovimientos" />
+            <End Role="HistorialSaldos" EntitySet="HistorialSaldos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Historial__IdUsu__7B5B524B" Association="Self.FK__Historial__IdUsu__7B5B524B">
+            <End Role="UXI_Usuarios" EntitySet="UXI_Usuarios" />
+            <End Role="HistorialSaldos" EntitySet="HistorialSaldos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CuentaUsuario_UXI_Usuarios" Association="Self.FK_CuentaUsuario_UXI_Usuarios">
+            <End Role="UXI_Usuarios" EntitySet="UXI_Usuarios" />
+            <End Role="CuentaUsuario" EntitySet="CuentaUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TblOrdenDeCompra_CAT_EStatusPedimento" Association="Self.FK_TblOrdenDeCompra_CAT_EStatusPedimento">
+            <End Role="CAT_EStatusPedimento" EntitySet="CAT_EStatusPedimento" />
+            <End Role="TblOrdenDeCompra" EntitySet="TblOrdenDeCompra" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TblOrdenDeCompra_UXI_Usuarios" Association="Self.FK_TblOrdenDeCompra_UXI_Usuarios">
+            <End Role="UXI_Usuarios" EntitySet="UXI_Usuarios" />
+            <End Role="TblOrdenDeCompra" EntitySet="TblOrdenDeCompra" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TblProductos_TblCategoria" Association="Self.FK_TblProductos_TblCategoria">
+            <End Role="TblCategoria" EntitySet="TblCategoria" />
+            <End Role="TblProductos" EntitySet="TblProductos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TblRelacionPedimento_TblOrdenDeCompra" Association="Self.FK_TblRelacionPedimento_TblOrdenDeCompra">
+            <End Role="TblOrdenDeCompra" EntitySet="TblOrdenDeCompra" />
+            <End Role="TblRelacionPedimento" EntitySet="TblRelacionPedimento" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TblRelacionPedimento_TblProductos" Association="Self.FK_TblRelacionPedimento_TblProductos">
+            <End Role="TblProductos" EntitySet="TblProductos" />
+            <End Role="TblRelacionPedimento" EntitySet="TblRelacionPedimento" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="uxisolutionbdModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="uxisolutionbdEntities" annotation:LazyLoadingEnabled="false">
+          <EntitySet Name="UXI_Usuarios" EntityType="uxisolutionbdModel.UXI_Usuarios" />
+          <EntitySet Name="CuentaUsuario" EntityType="uxisolutionbdModel.CuentaUsuario" />
+          <EntitySet Name="HistorialSaldos" EntityType="uxisolutionbdModel.HistorialSaldos" />
+          <EntitySet Name="TblCategoria" EntityType="uxisolutionbdModel.TblCategoria" />
+          <EntitySet Name="TblOrdenDeCompra" EntityType="uxisolutionbdModel.TblOrdenDeCompra" />
+          <EntitySet Name="TblRelacionPedimento" EntityType="uxisolutionbdModel.TblRelacionPedimento" />
+          <AssociationSet Name="FK_CuentaUsuario_UXI_Usuarios" Association="uxisolutionbdModel.FK_CuentaUsuario_UXI_Usuarios">
+            <End Role="UXI_Usuarios" EntitySet="UXI_Usuarios" />
+            <End Role="CuentaUsuario" EntitySet="CuentaUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TblOrdenDeCompra_UXI_Usuarios" Association="uxisolutionbdModel.FK_TblOrdenDeCompra_UXI_Usuarios">
+            <End Role="UXI_Usuarios" EntitySet="UXI_Usuarios" />
+            <End Role="TblOrdenDeCompra" EntitySet="TblOrdenDeCompra" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TblRelacionPedimento_TblOrdenDeCompra" Association="uxisolutionbdModel.FK_TblRelacionPedimento_TblOrdenDeCompra">
+            <End Role="TblOrdenDeCompra" EntitySet="TblOrdenDeCompra" />
+            <End Role="TblRelacionPedimento" EntitySet="TblRelacionPedimento" />
+          </AssociationSet>
+          <FunctionImport Name="GetODCbyODC" ReturnType="Collection(uxisolutionbdModel.GetODCbyODC_Result)">
+          <Parameter Name="idOdc" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="sysdiagrams" EntityType="uxisolutionbdModel.sysdiagrams" />
+          <FunctionImport Name="GetODCbyUsr">
+          <Parameter Name="idUsur" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getOrdenesDeCompra" ReturnType="Collection(uxisolutionbdModel.getOrdenesDeCompra_Result)" >
+            <Parameter Name="IdOrdenCompra" Mode="In" Type="Int32" />
+            <Parameter Name="FechaOrdenD" Mode="In" Type="DateTime" />
+            <Parameter Name="FechaOrdenH" Mode="In" Type="DateTime" />
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(uxisolutionbdModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(uxisolutionbdModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="CAT_EStatusPedimento" EntityType="uxisolutionbdModel.CAT_EStatusPedimento" />
+          <AssociationSet Name="FK_TblOrdenDeCompra_CAT_EStatusPedimento" Association="uxisolutionbdModel.FK_TblOrdenDeCompra_CAT_EStatusPedimento">
+            <End Role="CAT_EStatusPedimento" EntitySet="CAT_EStatusPedimento" />
+            <End Role="TblOrdenDeCompra" EntitySet="TblOrdenDeCompra" />
+          </AssociationSet>
+          <FunctionImport Name="sp_getOrderDetail" ReturnType="Collection(uxisolutionbdModel.sp_getOrderDetail_Result)">
+          <Parameter Name="IdOrdenCompra" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_getServicesXParam" ReturnType="Collection(uxisolutionbdModel.sp_getServicesXParam_Result)">
+            <Parameter Name="IdProducto" Mode="In" Type="Int32" />
+            <Parameter Name="IdCategoria" Mode="In" Type="Int32" />
+            <Parameter Name="Activo" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <EntitySet Name="TblServicio_Precio_tipoUsuario" EntityType="uxisolutionbdModel.TblServicio_Precio_tipoUsuario" />
+          <EntitySet Name="TblProductos" EntityType="uxisolutionbdModel.TblProductos" />
+          <AssociationSet Name="FK_TblProductos_TblCategoria" Association="uxisolutionbdModel.FK_TblProductos_TblCategoria">
+            <End Role="TblCategoria" EntitySet="TblCategoria" />
+            <End Role="TblProductos" EntitySet="TblProductos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TblRelacionPedimento_TblProductos" Association="uxisolutionbdModel.FK_TblRelacionPedimento_TblProductos">
+            <End Role="TblProductos" EntitySet="TblProductos" />
+            <End Role="TblRelacionPedimento" EntitySet="TblRelacionPedimento" />
+          </AssociationSet>
+          <FunctionImport Name="getOrdenesDeCompraServicio" ReturnType="Collection(uxisolutionbdModel.getOrdenesDeCompraServicio_Result)">
+            <Parameter Name="IdOrdenCompra" Mode="In" Type="Int32" />
+            <Parameter Name="FechaOrdenD" Mode="In" Type="DateTime" />
+            <Parameter Name="FechaOrdenH" Mode="In" Type="DateTime" />
+            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SPBI_TOP10USR" ReturnType="Collection(uxisolutionbdModel.SPBI_TOP10USR_Result)">
+            <Parameter Name="Fecha_ini" Mode="In" Type="DateTime" />
+            <Parameter Name="Fecha_Fin" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <EntitySet Name="UXI_Proveedores" EntityType="uxisolutionbdModel.UXI_Proveedores" />
+          <FunctionImport Name="SPU_GetUsuarioCuenta" ReturnType="Collection(uxisolutionbdModel.SPU_GetUsuarioCuenta_Result)" />
+          <EntitySet Name="CAT_TiposMovimientos" EntityType="uxisolutionbdModel.CAT_TiposMovimientos" />
+          <EntitySet Name="MensajesOrdenes" EntityType="uxisolutionbdModel.MensajesOrdenes" />
+          <AssociationSet Name="FK__Historial__IDTip__778AC167" Association="uxisolutionbdModel.FK__Historial__IDTip__778AC167">
+            <End Role="CAT_TiposMovimientos" EntitySet="CAT_TiposMovimientos" />
+            <End Role="HistorialSaldos" EntitySet="HistorialSaldos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Historial__IdUsu__7B5B524B" Association="uxisolutionbdModel.FK__Historial__IdUsu__7B5B524B">
+            <End Role="UXI_Usuarios" EntitySet="UXI_Usuarios" />
+            <End Role="HistorialSaldos" EntitySet="HistorialSaldos" />
+          </AssociationSet>
+          <FunctionImport Name="sp_getMensajesOrdenes" ReturnType="Collection(uxisolutionbdModel.sp_getMensajesOrdenes_Result)">
+            <Parameter Name="IdOrdenCompra" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="UXI_Usuarios">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdRol" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApPaterno" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApMaterno" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Telefono" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FUM" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UUM" Type="Int32" Nullable="false" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <Property Name="TipoCliente" Type="Int32" />
+          <NavigationProperty Name="CuentaUsuario" Relationship="uxisolutionbdModel.FK_CuentaUsuario_UXI_Usuarios" FromRole="UXI_Usuarios" ToRole="CuentaUsuario" />
+          <NavigationProperty Name="TblOrdenDeCompra" Relationship="uxisolutionbdModel.FK_TblOrdenDeCompra_UXI_Usuarios" FromRole="UXI_Usuarios" ToRole="TblOrdenDeCompra" />
+          <Property Name="VerTarifas" Type="Boolean" />
+          <NavigationProperty Name="HistorialSaldos" Relationship="uxisolutionbdModel.FK__Historial__IdUsu__7B5B524B" FromRole="UXI_Usuarios" ToRole="HistorialSaldos" />
+        </EntityType>
+        <EntityType Name="CuentaUsuario">
+          <Key>
+            <PropertyRef Name="IdCuentaUsuario" />
+          </Key>
+          <Property Name="IdCuentaUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="SaldoAFavor" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="UUM" Type="Int32" />
+          <Property Name="FUM" Type="DateTime" Precision="3" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="UXI_Usuarios" Relationship="uxisolutionbdModel.FK_CuentaUsuario_UXI_Usuarios" FromRole="CuentaUsuario" ToRole="UXI_Usuarios" />
+        </EntityType>
+        <EntityType Name="HistorialSaldos">
+          <Key>
+            <PropertyRef Name="IdHistorial" />
+          </Key>
+          <Property Name="IdHistorial" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Fecha" Type="DateTime" Precision="0" />
+          <Property Name="UUM" Type="Int32" Nullable="false" />
+          <Property Name="IDTipoMovimiento" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuario" Type="Int32" />
+          <Property Name="Monto_Entrada" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Monto_Salida" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <NavigationProperty Name="CAT_TiposMovimientos" Relationship="uxisolutionbdModel.FK__Historial__IDTip__778AC167" FromRole="HistorialSaldos" ToRole="CAT_TiposMovimientos" />
+          <NavigationProperty Name="UXI_Usuarios" Relationship="uxisolutionbdModel.FK__Historial__IdUsu__7B5B524B" FromRole="HistorialSaldos" ToRole="UXI_Usuarios" />
+        </EntityType>
+        <EntityType Name="TblCategoria">
+          <Key>
+            <PropertyRef Name="IdCategoria" />
+          </Key>
+          <Property Name="IdCategoria" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DescCategoria" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FUM" Type="DateTime" Precision="0" />
+          <Property Name="UUM" Type="Int32" />
+          <Property Name="Activo" Type="Boolean" />
+          <NavigationProperty Name="TblProductos" Relationship="uxisolutionbdModel.FK_TblProductos_TblCategoria" FromRole="TblCategoria" ToRole="TblProductos" />
+        </EntityType>
+        <EntityType Name="TblOrdenDeCompra">
+          <Key>
+            <PropertyRef Name="IdOrdenCompra" />
+          </Key>
+          <Property Name="IdOrdenCompra" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="IdZona" Type="Int32" />
+          <Property Name="ReferenciaBancaria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IdEstatusOC" Type="Int32" Nullable="false" />
+          <Property Name="FechaOrden" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="FechaPagoMax" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="FUM" Type="DateTime" Precision="0" />
+          <Property Name="UUM" Type="Int32" />
+          <NavigationProperty Name="UXI_Usuarios" Relationship="uxisolutionbdModel.FK_TblOrdenDeCompra_UXI_Usuarios" FromRole="TblOrdenDeCompra" ToRole="UXI_Usuarios" />
+          <NavigationProperty Name="TblRelacionPedimento" Relationship="uxisolutionbdModel.FK_TblRelacionPedimento_TblOrdenDeCompra" FromRole="TblOrdenDeCompra" ToRole="TblRelacionPedimento" />
+          <NavigationProperty Name="CAT_EStatusPedimento" Relationship="uxisolutionbdModel.FK_TblOrdenDeCompra_CAT_EStatusPedimento" FromRole="TblOrdenDeCompra" ToRole="CAT_EStatusPedimento" />
+        </EntityType>
+        <EntityType Name="TblRelacionPedimento">
+          <Key>
+            <PropertyRef Name="IdODC" />
+          </Key>
+          <Property Name="IdODC" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdOrdenCompra" Type="Int32" Nullable="false" />
+          <Property Name="IdProducto" Type="Int32" Nullable="false" />
+          <Property Name="SKU" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PrecioNeto" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PrecioVenta" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IdDescuento" Type="Int32" Nullable="false" />
+          <Property Name="Total" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="FechaPedimento" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="IdEstatusPedimento" Type="Int32" Nullable="false" />
+          <Property Name="IMEI" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="UUM" Type="Int32" />
+          <Property Name="FUM" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="TblOrdenDeCompra" Relationship="uxisolutionbdModel.FK_TblRelacionPedimento_TblOrdenDeCompra" FromRole="TblRelacionPedimento" ToRole="TblOrdenDeCompra" />
+          <NavigationProperty Name="TblProductos" Relationship="uxisolutionbdModel.FK_TblRelacionPedimento_TblProductos" FromRole="TblRelacionPedimento" ToRole="TblProductos" />
+        </EntityType>
+        <Association Name="FK_CuentaUsuario_UXI_Usuarios">
+          <End Type="uxisolutionbdModel.UXI_Usuarios" Role="UXI_Usuarios" Multiplicity="1" />
+          <End Type="uxisolutionbdModel.CuentaUsuario" Role="CuentaUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UXI_Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="CuentaUsuario">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TblOrdenDeCompra_UXI_Usuarios">
+          <End Type="uxisolutionbdModel.UXI_Usuarios" Role="UXI_Usuarios" Multiplicity="1" />
+          <End Type="uxisolutionbdModel.TblOrdenDeCompra" Role="TblOrdenDeCompra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UXI_Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="TblOrdenDeCompra">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TblRelacionPedimento_TblOrdenDeCompra">
+          <End Type="uxisolutionbdModel.TblOrdenDeCompra" Role="TblOrdenDeCompra" Multiplicity="1" />
+          <End Type="uxisolutionbdModel.TblRelacionPedimento" Role="TblRelacionPedimento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblOrdenDeCompra">
+              <PropertyRef Name="IdOrdenCompra" />
+            </Principal>
+            <Dependent Role="TblRelacionPedimento">
+              <PropertyRef Name="IdOrdenCompra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="GetODCbyODC_Result">
+          <Property Type="Int32" Name="idusuario" Nullable="false" />
+          <Property Type="String" Name="email" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="telefono" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="apPaterno" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdOrdenCompra" Nullable="false" />
+          <Property Type="Decimal" Name="Total" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="DateTime" Name="FechaOrden" Nullable="false" />
+          <Property Type="Int32" Name="IdProducto" Nullable="false" />
+          <Property Type="String" Name="Descripcion_Larga" Nullable="true" MaxLength="500" />
+          <Property Type="Decimal" Name="PrecioVenta" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="IMEI" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="descripcion" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <ComplexType Name="getOrdenesDeCompra_Result">
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="Int32" Name="IdZona" Nullable="true" />
+          <Property Type="String" Name="ReferenciaBancaria" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Total" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="IdEstatusOC" Nullable="false" />
+          <Property Type="DateTime" Name="FechaOrden" Nullable="false" />
+          <Property Type="DateTime" Name="FechaPagoMax" Nullable="false" />
+          <Property Type="DateTime" Name="FUM" Nullable="true" />
+          <Property Type="Int32" Name="UUM" Nullable="true" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ApPaterno" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ApMaterno" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdOrdenCompra" Nullable="false" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="EstatusDesc" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Telefono" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="CAT_EStatusPedimento">
+          <Key>
+            <PropertyRef Name="IdEstatusOC" />
+          </Key>
+          <Property Name="IdEstatusOC" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="UUM" Type="Int32" />
+          <Property Name="FUM" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="TblOrdenDeCompra" Relationship="uxisolutionbdModel.FK_TblOrdenDeCompra_CAT_EStatusPedimento" FromRole="CAT_EStatusPedimento" ToRole="TblOrdenDeCompra" />
+        </EntityType>
+        <Association Name="FK_TblOrdenDeCompra_CAT_EStatusPedimento">
+          <End Type="uxisolutionbdModel.CAT_EStatusPedimento" Role="CAT_EStatusPedimento" Multiplicity="1" />
+          <End Type="uxisolutionbdModel.TblOrdenDeCompra" Role="TblOrdenDeCompra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CAT_EStatusPedimento">
+              <PropertyRef Name="IdEstatusOC" />
+            </Principal>
+            <Dependent Role="TblOrdenDeCompra">
+              <PropertyRef Name="IdEstatusOC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="sp_getOrderDetail_Result">
+          <Property Type="Int32" Name="IdOrdenCompra" Nullable="false" />
+          <Property Type="Int32" Name="IdODC" Nullable="false" />
+          <Property Type="Int32" Name="IdProducto" Nullable="false" />
+          <Property Type="Decimal" Name="PrecioNeto" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="PrecioVenta" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Total" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="IdDescuento" Nullable="false" />
+          <Property Type="String" Name="Descripcion_Corta" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="Descripcion_Larga" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="SKU" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="IMEI" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="sp_getServicesXParam_Result">
+          <Property Type="Int32" Name="idproducto" Nullable="false" />
+          <Property Type="String" Name="SKU" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Descripcion_Corta" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="Descripcion_Larga" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="IdCategoria" Nullable="true" />
+          <Property Type="String" Name="DescCategoria" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdProveedor" Nullable="true" />
+          <Property Type="String" Name="FacturaProveedor" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="PrecioNeto" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Boolean" Name="Activo" Nullable="true" />
+          </ComplexType>
+        <EntityType Name="TblServicio_Precio_tipoUsuario">
+          <Key>
+            <PropertyRef Name="IDServicioPrecioUsuario" />
+          </Key>
+          <Property Name="IDServicioPrecioUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdProducto" Type="Int32" Nullable="false" />
+          <Property Name="TipoCliente" Type="Int32" Nullable="false" />
+          <Property Name="Precio" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="TblProductos">
+          <Key>
+            <PropertyRef Name="IdProducto" />
+          </Key>
+          <Property Name="IdProducto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SKU" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion_Corta" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion_Larga" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="IdCategoria" Type="Int32" />
+          <Property Name="IdProveedor" Type="Int32" />
+          <Property Name="FacturaProveedor" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PrecioNeto" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Ubicacion" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="FUM" Type="DateTime" Precision="0" />
+          <Property Name="UUM" Type="Int32" />
+          <Property Name="Activo" Type="Boolean" />
+          <NavigationProperty Name="TblCategoria" Relationship="uxisolutionbdModel.FK_TblProductos_TblCategoria" FromRole="TblProductos" ToRole="TblCategoria" />
+          <NavigationProperty Name="TblRelacionPedimento" Relationship="uxisolutionbdModel.FK_TblRelacionPedimento_TblProductos" FromRole="TblProductos" ToRole="TblRelacionPedimento" />
+        </EntityType>
+        <Association Name="FK_TblProductos_TblCategoria">
+          <End Type="uxisolutionbdModel.TblCategoria" Role="TblCategoria" Multiplicity="0..1" />
+          <End Type="uxisolutionbdModel.TblProductos" Role="TblProductos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblCategoria">
+              <PropertyRef Name="IdCategoria" />
+            </Principal>
+            <Dependent Role="TblProductos">
+              <PropertyRef Name="IdCategoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TblRelacionPedimento_TblProductos">
+          <End Type="uxisolutionbdModel.TblProductos" Role="TblProductos" Multiplicity="1" />
+          <End Type="uxisolutionbdModel.TblRelacionPedimento" Role="TblRelacionPedimento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblProductos">
+              <PropertyRef Name="IdProducto" />
+            </Principal>
+            <Dependent Role="TblRelacionPedimento">
+              <PropertyRef Name="IdProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="getOrdenesDeCompraServicio_Result">
+          <Property Type="String" Name="Descripcion_corta" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="Descripcion_Larga" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="IdOrdenCompra" Nullable="false" />
+          <Property Type="Decimal" Name="Total" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="DateTime" Name="FechaOrden" Nullable="false" />
+          <Property Type="String" Name="IMEI" Nullable="true" MaxLength="500" />
+          <Property Type="Decimal" Name="PrecioNeto" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="PrecioVenta" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="100" />
+          <Property Type="Decimal" Name="TotalServicio" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="IdEstatusOC" Nullable="false" />
+          <Property Type="Int32" Name="IdProducto" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SPBI_TOP10USR_Result">
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="Total" Nullable="true" Precision="38" Scale="2" />
+        </ComplexType>
+        <EntityType Name="UXI_Proveedores">
+          <Key>
+            <PropertyRef Name="IdProveedor" />
+          </Key>
+          <Property Name="IdProveedor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApPaterno" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Telefono" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <Property Name="UUM" Type="Int32" Nullable="false" />
+          <Property Name="FUM" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <ComplexType Name="SPU_GetUsuarioCuenta_Result">
+          <Property Type="Int32" Name="IdRol" Nullable="false" />
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ApPaterno" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ApMaterno" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Telefono" Nullable="false" MaxLength="50" />
+          <Property Type="Boolean" Name="Activo" Nullable="false" />
+          <Property Type="Int32" Name="TipoCliente" Nullable="true" />
+          <Property Type="Decimal" Name="saldoafavor" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Boolean" Name="VerTarifas" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="CAT_TiposMovimientos">
+          <Key>
+            <PropertyRef Name="IDTipoMovimiento" />
+          </Key>
+          <Property Name="IDTipoMovimiento" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="HistorialSaldos" Relationship="uxisolutionbdModel.FK__Historial__IDTip__778AC167" FromRole="CAT_TiposMovimientos" ToRole="HistorialSaldos" />
+        </EntityType>
+        <EntityType Name="MensajesOrdenes">
+          <Key>
+            <PropertyRef Name="IdMensaje" />
+          </Key>
+          <Property Name="IdMensaje" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="IdOrdenCompra" Type="Int32" Nullable="false" />
+          <Property Name="Mensaje" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_Alta" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <Association Name="FK__Historial__IDTip__778AC167">
+          <End Type="uxisolutionbdModel.CAT_TiposMovimientos" Role="CAT_TiposMovimientos" Multiplicity="1" />
+          <End Type="uxisolutionbdModel.HistorialSaldos" Role="HistorialSaldos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CAT_TiposMovimientos">
+              <PropertyRef Name="IDTipoMovimiento" />
+            </Principal>
+            <Dependent Role="HistorialSaldos">
+              <PropertyRef Name="IDTipoMovimiento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Historial__IdUsu__7B5B524B">
+          <End Type="uxisolutionbdModel.UXI_Usuarios" Role="UXI_Usuarios" Multiplicity="0..1" />
+          <End Type="uxisolutionbdModel.HistorialSaldos" Role="HistorialSaldos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UXI_Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="HistorialSaldos">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="sp_getMensajesOrdenes_Result">
+          <Property Type="Int32" Name="IdMensaje" Nullable="false" />
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ApPaterno" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdOrdenCompra" Nullable="false" />
+          <Property Type="String" Name="Mensaje" Nullable="false" />
+          <Property Type="DateTime" Name="Fecha_Alta" Nullable="false" Precision="23" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="uxisolutionbdModelStoreContainer" CdmEntityContainer="uxisolutionbdEntities">
+          <EntitySetMapping Name="UXI_Usuarios">
+            <EntityTypeMapping TypeName="uxisolutionbdModel.UXI_Usuarios">
+              <MappingFragment StoreEntitySet="UXI_Usuarios">
+                <ScalarProperty Name="VerTarifas" ColumnName="VerTarifas" />
+                <ScalarProperty Name="TipoCliente" ColumnName="TipoCliente" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="UUM" ColumnName="UUM" />
+                <ScalarProperty Name="FUM" ColumnName="FUM" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ApMaterno" ColumnName="ApMaterno" />
+                <ScalarProperty Name="ApPaterno" ColumnName="ApPaterno" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CuentaUsuario">
+            <EntityTypeMapping TypeName="uxisolutionbdModel.CuentaUsuario">
+              <MappingFragment StoreEntitySet="CuentaUsuario">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="FUM" ColumnName="FUM" />
+                <ScalarProperty Name="UUM" ColumnName="UUM" />
+                <ScalarProperty Name="SaldoAFavor" ColumnName="SaldoAFavor" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdCuentaUsuario" ColumnName="IdCuentaUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HistorialSaldos">
+            <EntityTypeMapping TypeName="uxisolutionbdModel.HistorialSaldos">
+              <MappingFragment StoreEntitySet="HistorialSaldos">
+                <ScalarProperty Name="Monto_Salida" ColumnName="Monto_Salida" />
+                <ScalarProperty Name="Monto_Entrada" ColumnName="Monto_Entrada" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IDTipoMovimiento" ColumnName="IDTipoMovimiento" />
+                <ScalarProperty Name="UUM" ColumnName="UUM" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IdHistorial" ColumnName="IdHistorial" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TblCategoria">
+            <EntityTypeMapping TypeName="uxisolutionbdModel.TblCategoria">
+              <MappingFragment StoreEntitySet="TblCategoria">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="UUM" ColumnName="UUM" />
+                <ScalarProperty Name="FUM" ColumnName="FUM" />
+                <ScalarProperty Name="DescCategoria" ColumnName="DescCategoria" />
+                <ScalarProperty Name="IdCategoria" ColumnName="IdCategoria" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TblOrdenDeCompra">
+            <EntityTypeMapping TypeName="uxisolutionbdModel.TblOrdenDeCompra">
+              <MappingFragment StoreEntitySet="TblOrdenDeCompra">
+                <ScalarProperty Name="UUM" ColumnName="UUM" />
+                <ScalarProperty Name="FUM" ColumnName="FUM" />
+                <ScalarProperty Name="FechaPagoMax" ColumnName="FechaPagoMax" />
+                <ScalarProperty Name="FechaOrden" ColumnName="FechaOrden" />
+                <ScalarProperty Name="IdEstatusOC" ColumnName="IdEstatusOC" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="ReferenciaBancaria" ColumnName="ReferenciaBancaria" />
+                <ScalarProperty Name="IdZona" ColumnName="IdZona" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdOrdenCompra" ColumnName="IdOrdenCompra" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TblRelacionPedimento">
+            <EntityTypeMapping TypeName="uxisolutionbdModel.TblRelacionPedimento">
+              <MappingFragment StoreEntitySet="TblRelacionPedimento">
+                <ScalarProperty Name="FUM" ColumnName="FUM" />
+                <ScalarProperty Name="UUM" ColumnName="UUM" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="IdEstatusPedimento" ColumnName="IdEstatusPedimento" />
+                <ScalarProperty Name="FechaPedimento" ColumnName="FechaPedimento" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="IdDescuento" ColumnName="IdDescuento" />
+                <ScalarProperty Name="PrecioVenta" ColumnName="PrecioVenta" />
+                <ScalarProperty Name="PrecioNeto" ColumnName="PrecioNeto" />
+                <ScalarProperty Name="SKU" ColumnName="SKU" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="IdOrdenCompra" ColumnName="IdOrdenCompra" />
+                <ScalarProperty Name="IdODC" ColumnName="IdODC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetODCbyODC" FunctionName="uxisolutionbdModel.Store.GetODCbyODC">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="uxisolutionbdModel.GetODCbyODC_Result">
+                <ScalarProperty Name="idusuario" ColumnName="idusuario" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="apPaterno" ColumnName="apPaterno" />
+                <ScalarProperty Name="IdOrdenCompra" ColumnName="IdOrdenCompra" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="FechaOrden" ColumnName="FechaOrden" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="Descripcion_Larga" ColumnName="Descripcion_Larga" />
+                <ScalarProperty Name="PrecioVenta" ColumnName="PrecioVenta" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="uxisolutionbdModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetODCbyUsr" FunctionName="uxisolutionbdModel.Store.GetODCbyUsr" />
+          <FunctionImportMapping FunctionImportName="getOrdenesDeCompra" FunctionName="uxisolutionbdModel.Store.getOrdenesDeCompra">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="uxisolutionbdModel.getOrdenesDeCompra_Result">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdZona" ColumnName="IdZona" />
+                <ScalarProperty Name="ReferenciaBancaria" ColumnName="ReferenciaBancaria" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="IdEstatusOC" ColumnName="IdEstatusOC" />
+                <ScalarProperty Name="FechaOrden" ColumnName="FechaOrden" />
+                <ScalarProperty Name="FechaPagoMax" ColumnName="FechaPagoMax" />
+                <ScalarProperty Name="FUM" ColumnName="FUM" />
+                <ScalarProperty Name="UUM" ColumnName="UUM" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ApPaterno" ColumnName="ApPaterno" />
+                <ScalarProperty Name="ApMaterno" ColumnName="ApMaterno" />
+                <ScalarProperty Name="IdOrdenCompra" ColumnName="IdOrdenCompra" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EstatusDesc" ColumnName="EstatusDesc" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="uxisolutionbdModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="uxisolutionbdModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="uxisolutionbdModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="uxisolutionbdModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="uxisolutionbdModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="uxisolutionbdModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="uxisolutionbdModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="uxisolutionbdModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="uxisolutionbdModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="CAT_EStatusPedimento">
+            <EntityTypeMapping TypeName="uxisolutionbdModel.CAT_EStatusPedimento">
+              <MappingFragment StoreEntitySet="CAT_EStatusPedimento">
+                <ScalarProperty Name="FUM" ColumnName="FUM" />
+                <ScalarProperty Name="UUM" ColumnName="UUM" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdEstatusOC" ColumnName="IdEstatusOC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_getOrderDetail" FunctionName="uxisolutionbdModel.Store.sp_getOrderDetail">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="uxisolutionbdModel.sp_getOrderDetail_Result">
+                <ScalarProperty Name="IdOrdenCompra" ColumnName="IdOrdenCompra" />
+                <ScalarProperty Name="IdODC" ColumnName="IdODC" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="PrecioNeto" ColumnName="PrecioNeto" />
+                <ScalarProperty Name="PrecioVenta" ColumnName="PrecioVenta" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="IdDescuento" ColumnName="IdDescuento" />
+                <ScalarProperty Name="Descripcion_Corta" ColumnName="Descripcion_Corta" />
+                <ScalarProperty Name="Descripcion_Larga" ColumnName="Descripcion_Larga" />
+                <ScalarProperty Name="SKU" ColumnName="SKU" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_getServicesXParam" FunctionName="uxisolutionbdModel.Store.sp_getServicesXParam">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="uxisolutionbdModel.sp_getServicesXParam_Result">
+                <ScalarProperty Name="idproducto" ColumnName="idproducto" />
+                <ScalarProperty Name="SKU" ColumnName="SKU" />
+                <ScalarProperty Name="Descripcion_Corta" ColumnName="Descripcion_Corta" />
+                <ScalarProperty Name="Descripcion_Larga" ColumnName="Descripcion_Larga" />
+                <ScalarProperty Name="IdCategoria" ColumnName="IdCategoria" />
+                <ScalarProperty Name="DescCategoria" ColumnName="DescCategoria" />
+                <ScalarProperty Name="IdProveedor" ColumnName="IdProveedor" />
+                <ScalarProperty Name="FacturaProveedor" ColumnName="FacturaProveedor" />
+                <ScalarProperty Name="PrecioNeto" ColumnName="PrecioNeto" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="TblServicio_Precio_tipoUsuario">
+            <EntityTypeMapping TypeName="uxisolutionbdModel.TblServicio_Precio_tipoUsuario">
+              <MappingFragment StoreEntitySet="TblServicio_Precio_tipoUsuario">
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="TipoCliente" ColumnName="TipoCliente" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="IDServicioPrecioUsuario" ColumnName="IDServicioPrecioUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TblProductos">
+            <EntityTypeMapping TypeName="uxisolutionbdModel.TblProductos">
+              <MappingFragment StoreEntitySet="TblProductos">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="UUM" ColumnName="UUM" />
+                <ScalarProperty Name="FUM" ColumnName="FUM" />
+                <ScalarProperty Name="Ubicacion" ColumnName="Ubicacion" />
+                <ScalarProperty Name="PrecioNeto" ColumnName="PrecioNeto" />
+                <ScalarProperty Name="FacturaProveedor" ColumnName="FacturaProveedor" />
+                <ScalarProperty Name="IdProveedor" ColumnName="IdProveedor" />
+                <ScalarProperty Name="IdCategoria" ColumnName="IdCategoria" />
+                <ScalarProperty Name="Descripcion_Larga" ColumnName="Descripcion_Larga" />
+                <ScalarProperty Name="Descripcion_Corta" ColumnName="Descripcion_Corta" />
+                <ScalarProperty Name="SKU" ColumnName="SKU" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="getOrdenesDeCompraServicio" FunctionName="uxisolutionbdModel.Store.getOrdenesDeCompraServicio">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="uxisolutionbdModel.getOrdenesDeCompraServicio_Result">
+                <ScalarProperty Name="Descripcion_corta" ColumnName="Descripcion_corta" />
+                <ScalarProperty Name="Descripcion_Larga" ColumnName="Descripcion_Larga" />
+                <ScalarProperty Name="IdOrdenCompra" ColumnName="IdOrdenCompra" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="FechaOrden" ColumnName="FechaOrden" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="PrecioNeto" ColumnName="PrecioNeto" />
+                <ScalarProperty Name="PrecioVenta" ColumnName="PrecioVenta" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="TotalServicio" ColumnName="TotalServicio" />
+                <ScalarProperty Name="IdEstatusOC" ColumnName="IdEstatusOC" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SPBI_TOP10USR" FunctionName="uxisolutionbdModel.Store.SPBI_TOP10USR">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="uxisolutionbdModel.SPBI_TOP10USR_Result">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="UXI_Proveedores">
+            <EntityTypeMapping TypeName="uxisolutionbdModel.UXI_Proveedores">
+              <MappingFragment StoreEntitySet="UXI_Proveedores">
+                <ScalarProperty Name="FUM" ColumnName="FUM" />
+                <ScalarProperty Name="UUM" ColumnName="UUM" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="ApPaterno" ColumnName="ApPaterno" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdProveedor" ColumnName="IdProveedor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SPU_GetUsuarioCuenta" FunctionName="uxisolutionbdModel.Store.SPU_GetUsuarioCuenta">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="uxisolutionbdModel.SPU_GetUsuarioCuenta_Result">
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ApPaterno" ColumnName="ApPaterno" />
+                <ScalarProperty Name="ApMaterno" ColumnName="ApMaterno" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="TipoCliente" ColumnName="TipoCliente" />
+                <ScalarProperty Name="saldoafavor" ColumnName="saldoafavor" />
+                <ScalarProperty Name="VerTarifas" ColumnName="VerTarifas" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="CAT_TiposMovimientos">
+            <EntityTypeMapping TypeName="uxisolutionbdModel.CAT_TiposMovimientos">
+              <MappingFragment StoreEntitySet="CAT_TiposMovimientos">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IDTipoMovimiento" ColumnName="IDTipoMovimiento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MensajesOrdenes">
+            <EntityTypeMapping TypeName="uxisolutionbdModel.MensajesOrdenes">
+              <MappingFragment StoreEntitySet="MensajesOrdenes">
+                <ScalarProperty Name="Fecha_Alta" ColumnName="Fecha_Alta" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="IdOrdenCompra" ColumnName="IdOrdenCompra" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdMensaje" ColumnName="IdMensaje" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_getMensajesOrdenes" FunctionName="uxisolutionbdModel.Store.sp_getMensajesOrdenes">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="uxisolutionbdModel.sp_getMensajesOrdenes_Result">
+                <ScalarProperty Name="IdMensaje" ColumnName="IdMensaje" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ApPaterno" ColumnName="ApPaterno" />
+                <ScalarProperty Name="IdOrdenCompra" ColumnName="IdOrdenCompra" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="Fecha_Alta" ColumnName="Fecha_Alta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

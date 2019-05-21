@@ -1,0 +1,64 @@
+﻿@model List<MvcApplication1.Models.Producto>
+@{
+    Layout = null;
+}
+
+<style type="text/css">
+    .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+        border-color: #999;
+        width:100%;
+    }
+
+        .tg td {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            padding: 10px 5px;
+            border-style: solid;
+            border-width: 1px;
+            overflow: hidden;
+            word-break: normal;
+            border-color: #999;
+            color: #444;
+            background-color: #F7FDFA;
+        }
+
+        .tg th {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: normal;
+            padding: 10px 5px;
+            border-style: solid;
+            border-width: 1px;
+            overflow: hidden;
+            word-break: normal;
+            border-color: #999;
+            color: #fff;
+            background-color: #26ADE4;
+        }
+
+        .tg .tg-yw4l {
+            vertical-align: top;
+        }
+</style>
+<table class="tg">
+    <tr>
+        <th class="tg-031e">DESC</th>
+        <th class="tg-yw4l">NOMBRE</th>
+        <th class="tg-yw4l">PRECIO</th>
+    </tr>
+@foreach (var item in Model)
+{
+    <tr>
+        <td class='tg-yw4l'> @item.Descripcion </td>
+        <td class="tg-yw4l">@item.Nombre</td>
+        <td class="tg-yw4l">@item.Precio</td>
+    </tr>
+    
+     
+}
+</table>
+
+
+

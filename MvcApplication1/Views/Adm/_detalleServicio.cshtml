@@ -1,0 +1,115 @@
+﻿@using UxiEntities
+@model UxiEntities.Servicios
+@{ 
+    var index = 0;
+}
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel"><b>Detalle del Servicio @Model.IdProducto</b></h4>
+        </div>
+        <div class="modal-body">
+           @using (Ajax.BeginForm(new AjaxOptions { UpdateTargetId = "modalService", OnSuccess = "gotoSearch" }))
+           {
+            @Html.ValidationSummary(true)
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="form_status">Descripcion Corta</label>
+                        <input id="txtDescCorta" type="text" name="Descripcion_Corta" class="form-control" placeholder="" value="@Model.Descripcion_Corta">
+                        @Html.ValidationMessageFor(model => model.Descripcion_Corta, String.Empty, new { @style = "color:red;!important" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="form_status">Descripcion Larga</label>
+                        <textarea id="txtDescCorta" name="Descripcion_Larga" class="form-control" placeholder="">@Model.Descripcion_Larga</textarea>
+                        @Html.ValidationMessageFor(model => model.Descripcion_Larga, String.Empty, new { @style = "color:red;!important" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="form_status">Categoria</label>
+                        <select id="cboCategoria" name="IdCategoria" class="form-control input-sm input-inverse">
+                            @foreach (var cat in (List<Categoria>)ViewData["listCategoria"])
+                            {
+                                if (cat.IdCategoria == Model.IdCategoria)
+                                {
+                                    <option selected value="@cat.IdCategoria">@cat.Descripcion</option>
+                                }
+                                else
+                                {
+                                    <option value="@cat.IdCategoria">@cat.Descripcion</option>
+                                }
+                            }
+                        </select>
+                        @Html.ValidationMessageFor(model => model.IdCategoria, String.Empty, new { @style = "color:red;!important" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="form_status">Precio minorista</label>
+                        <input id="txtPrecioNeto" type="text" name="PrecioNeto" class="form-control" placeholder="" value="@Model.PrecioNeto">
+                        @Html.ValidationMessageFor(model => model.PrecioNeto, String.Empty, new { @style = "color:red;!important" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="form_status">Precio mayorista</label>
+                        <input id="txtPrecioMin" type="text" name="PrecioMayorista" class="form-control" placeholder="" value="@Model.PrecioMayorista">
+                        @Html.ValidationMessageFor(model => model.PrecioMayorista, String.Empty, new { @style = "color:red;!important" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="form_status">Precio mayorista PRO </label>
+                        <input id="txtPrecioMay" type="text" name="PrecioMayoristaPRO" class="form-control" placeholder="" value="@Model.PrecioMayoristaPRO">
+                        @Html.ValidationMessageFor(model => model.PrecioMayoristaPRO , String.Empty, new { @style = "color:red;!important" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="form_status">Estatus</label>
+                        <select id="cboEstatus" name="Activo" class="form-control input-sm input-inverse">
+                            @if ((bool)Model.Activo)
+                            {
+                                <option selected value="true">Activo</option>
+                                <option value="false">Inactivo</option>
+                            }
+                            else
+                            {
+                                <option value="true">Activo</option>
+                                <option selected value="false">Inactivo</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="text-align:right; padding-right:10px;">
+                            <button type="button" class="btn btn-sm btn-black" data-dismiss="modal">Cancelar</button>
+                            <input type="submit" value="Guardar" class="btn btn-sm btn-black pull-right" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input id="IdProducto" name="IdProducto" type="hidden" value="@Model.IdProducto" />
+            <input id="IdCategoria" name="IdCategoria" type="hidden" value="@Model.IdCategoria  " />
+            <input id="IdProveedor" name="IdProveedor" type="hidden" value="@Model.IdProveedor  " />
+            <input id="SKU" name="SKU" type="hidden" value="@Model.SKU" />
+            <input id="Ubicacion" name="Ubicacion" type="hidden" value="@Model.Ubicacion" />
+            <input id="FacturaProveedor" name="FacturaProveedor" type="hidden" value="@Model.FacturaProveedor" />            
+            <input id="Desc_Categoria" name="Desc_Categoria" type="hidden" value="@Model.Desc_Categoria" />
+               foreach (var pre in Model.Precios)
+               {
+                <input id="IDServicioPrecioUsuario_@pre.IDServicioPrecioUsuario" name="Precios[@index].IDServicioPrecioUsuario" type="hidden" value="@pre.IDServicioPrecioUsuario" />
+                <input id="Precio_@pre.IDServicioPrecioUsuario" name="Precios[@index].Precio" type="hidden" value="@pre.Precio" />
+                <input id="TipoCliente_@pre.IDServicioPrecioUsuario" name="Precios[@index].Tipocliente" type="hidden" value="@pre.Tipocliente" />
+                   index++;
+               }
+           }
+        </div>
+    </div>
+</div>

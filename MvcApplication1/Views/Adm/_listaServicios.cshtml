@@ -1,0 +1,41 @@
+﻿@using UxiEntities
+@model List<UxiEntities.Servicios>
+<div style=" overflow-y: scroll;">
+    <table id="tblServiciosAdm" class="mbr-table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th style="padding-left: .2cm;">Descripción corta</th>
+                <th style="padding-left: .2cm;">Descripción larga</th>
+                <th>Precio minorista</th>
+                <th>Precio mayorista</th>
+                <th>Precio mayorista pro</th>
+                <th style="padding-left: .3cm;">Categoria</th>
+                <th style="text-align:center; padding-left: .3cm;">Estatus</th>
+                <th style="padding-left: .3cm;">Acciones</th>
+            </tr>
+        </thead>
+
+        @foreach (var ser in Model)
+    {
+    <tr>
+        <td>@ser.IdProducto</td>
+        <td style="padding-left: .2cm;">@ser.Descripcion_Corta</td>
+        <td style="padding-left: .2cm;">@ser.Descripcion_Larga</td>
+        <td style="text-align:right" ;>@ser.PrecioNeto</td>
+        <td style="text-align:right" ;>@ser.PrecioMayorista</td>
+        <td style="text-align:right" ;>@ser.PrecioMayoristaPRO</td>
+        <td style="padding-left: .3cm;">@ser.Desc_Categoria</td>
+        @if ((bool)ser.Activo)
+            {
+            <td style="text-align:center; padding-left: .3cm;">Activo</td>
+            }
+            else
+            {
+            <td style="text-align:center; padding-left: .3cm;">Inactivo</td>
+            }
+        <td style="padding-left: .3cm;">@Ajax.ActionLink("Detalle", "_detalleServicio",new {ids = ser.IdProducto },  new AjaxOptions { UpdateTargetId= "modalService", OnComplete = "showModal"}, new { @class = "btn btn-sm btn-black" })</td>
+    </tr>
+    }
+    </table>
+    </div>
